@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The title will be automatically populated by apex-core.js -->
+    <title>PLACEHOLDER TITLE</title>
+    
+    <!-- 1. Include the Universal CSS -->
+    <link rel="stylesheet" href="static/apex-modern.css">
+
+    <!-- 2. Include Metadata Configuration -->
+    <script src="static/apex-config.js"></script>
+    <script src="static/apex-core.js" defer></script>
+</head>
+
+<body>
+
+    <!-- STANDARD HEADER (v2) -->
+    <header>
+        <div class="app-container">
+            <div class="header-content">
+                <svg class="app-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="6" fill="var(--brand-primary)" />
+                    <path d="M16 8L24 22H8L16 8Z" fill="white" />
+                </svg>
+                <!-- Automatically populated class: app-title-text -->
+                <h1 class="header-title app-title-text" style="flex: 1;">PLACEHOLDER TITLE</h1>
+
+                <!-- THEME TOGGLE BUTTON -->
+                <button class="btn btn-ghost" onclick="toggleApexTheme()" aria-label="Toggle Theme" style="padding: 0.5rem;">
+                    <!-- Sun Icon (Visible in Dark Mode) -->
+                    <svg class="icon theme-toggle-icon" data-for="dark" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="18.36" x2="5.64" y2="16.93"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <!-- Moon Icon (Visible in Light Mode) -->
+                    <svg class="icon theme-toggle-icon" data-for="light" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="section">
+        <div class="app-container">
+            
+            <div class="stack" style="--gutter: var(--space-12);">
+                
+                <!-- TYPOGRAPHY SECTION -->
+                <section class="stack">
+                    <p class="metadata">Foundation</p>
+                    <!-- Automatically populated class: app-title-text -->
+                    <h1 class="mt-2 app-title-text">The Apex Aesthetic</h1>
+                    <p class="body-text mt-4">A professional, traditionalist-modern design system built for clarity, hierarchy, and professional rigor. Strictly left-aligned, logically layered, and purposefully constrained.</p>
+                </section>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-subtle);">
+
+                <!-- CARDS & SURFACES -->
+                <section class="stack">
+                    <h2 class="title-ui">Surfaces & Layering</h2>
+                    <div class="cluster mt-6" style="--gutter: var(--space-6); align-items: stretch;">
+                        
+                        <div class="card card--highlight stack" style="flex: 1; min-width: 300px; --highlight-color: var(--town-forest-green);">
+                            <p class="metadata">Municipal Style</p>
+                            <h3 class="mt-2">Forest Green Accent</h3>
+                            <p class="body-text mt-2">Integrating the town's forest green for a grounded, professional feel.</p>
+                        </div>
+
+                        <a href="#" class="card card--interactive stack" style="flex: 1; min-width: 300px; text-decoration: none;">
+                            <p class="metadata">Interactive Variant</p>
+                            <h3 class="mt-2">Hover Elevation</h3>
+                            <p class="body-text mt-2">Cards can lift on hover to indicate interactivity. Perfect for dashboard links.</p>
+                        </a>
+
+                        <div class="card card--highlight stack" style="flex: 1; min-width: 300px; --highlight-color: var(--town-sunflower-gold);">
+                            <p class="metadata">Emphasis Variant</p>
+                            <h3 class="mt-2">Sunflower Gold</h3>
+                            <p class="body-text mt-2">Using gold for high-visibility highlights or cautionary information.</p>
+                        </div>
+
+                    </div>
+                    
+                    <div class="mt-6">
+                        <div class="card card--subtle">
+                            <h3 class="title-ui">Subtle Surface (bg-inner)</h3>
+                            <p class="body-text mt-2">A recessed surface for secondary information or nested tools.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BUTTONS SECTION -->
+                <section class="stack">
+                    <h2 class="title-ui">Action System</h2>
+                    <div class="cluster mt-6">
+                        <button class="btn btn-primary">Primary Action</button>
+                        <button class="btn btn-secondary">Secondary Action</button>
+                        <button class="btn btn-ghost">Ghost Action</button>
+                        <button class="btn btn-danger">Danger Action</button>
+                    </div>
+                    <p class="metadata mt-4">States: Hover, Active, and Focus-Visible supported across all variants.</p>
+                </section>
+
+                <!-- FORM SYSTEM -->
+                <section class="stack">
+                    <h2 class="title-ui">Input & Form Styling</h2>
+                    <div class="card mt-6" style="max-width: 600px;">
+                        <form class="stack">
+                            <div>
+                                <label class="label">Full Name</label>
+                                <input type="text" placeholder="e.g. Alexander Hamilton">
+                            </div>
+                            <div>
+                                <label class="label">Department</label>
+                                <select>
+                                    <option>Treasury</option>
+                                    <option>State</option>
+                                    <option>War</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="label">Notes</label>
+                                <textarea rows="4" placeholder="Enter observations..."></textarea>
+                            </div>
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">Save Configuration</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- COLOR & UTILITIES -->
+                <section class="stack">
+                    <h2 class="title-ui">Official Town Brand Palette</h2>
+                    <p class="body-text">These colors are derived from the official municipal style guide and integrated for semantic and decorative use.</p>
+                    
+                    <div class="cluster mt-6" style="--gutter: var(--space-4);">
+                        <div class="card stack" style="flex: 1; min-width: 140px; padding: var(--space-4); background: var(--town-baltic-blue); color: white;">
+                            <span style="font-size: 0.75rem; font-weight: 600;">Baltic Blue</span>
+                            <span style="font-size: 0.75rem; opacity: 0.8;">#005F86</span>
+                        </div>
+                        <div class="card stack" style="flex: 1; min-width: 140px; padding: var(--space-4); background: var(--town-forest-green); color: white;">
+                            <span style="font-size: 0.75rem; font-weight: 600;">Forest Green</span>
+                            <span style="font-size: 0.75rem; opacity: 0.8;">#44883E</span>
+                        </div>
+                        <div class="card stack" style="flex: 1; min-width: 140px; padding: var(--space-4); background: var(--town-sunflower-gold); color: var(--text-main);">
+                            <span style="font-size: 0.75rem; font-weight: 600;">Sunflower Gold</span>
+                            <span style="font-size: 0.75rem; opacity: 0.8;">#F1BE48</span>
+                        </div>
+                        <div class="card stack" style="flex: 1; min-width: 140px; padding: var(--space-4); background: var(--town-cinnabar); color: white;">
+                            <span style="font-size: 0.75rem; font-weight: 600;">Cinnabar</span>
+                            <span style="font-size: 0.75rem; opacity: 0.8;">#E04F39</span>
+                        </div>
+                        <div class="card stack" style="flex: 1; min-width: 140px; padding: var(--space-4); background: var(--town-grey-olive); color: white;">
+                            <span style="font-size: 0.75rem; font-weight: 600;">Grey Olive</span>
+                            <span style="font-size: 0.75rem; opacity: 0.8;">#968C83</span>
+                        </div>
+                    </div>
+
+                    <div class="cluster mt-6">
+                        <div class="card bg-forest-soft border-forest" style="padding: var(--space-6); flex: 1;">
+                            <h3 class="text-forest">Forest Accent</h3>
+                            <p class="body-text mt-2">Using .bg-forest-soft and .border-forest for a professional municipal feel.</p>
+                        </div>
+                        <div class="card bg-gold-soft border-gold" style="padding: var(--space-6); flex: 1;">
+                            <h3 class="text-gold">Gold Accent</h3>
+                            <p class="body-text mt-2">Using .bg-gold-soft and .border-gold for highlights and warnings.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="section" style="background: var(--bg-inner); padding-block: var(--space-8);">
+        <div class="app-container">
+            <!-- Automatically populated class: app-footer-meta -->
+            <p class="metadata app-footer-meta">PLACEHOLDER TITLE v0.0.0 &copy; 2026</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
