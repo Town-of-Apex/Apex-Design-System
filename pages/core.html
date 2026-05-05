@@ -4,15 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- The title will be automatically populated by apex-core.js -->
-    <title>PLACEHOLDER TITLE</title>
+    <!-- 0. Handle Sub-path Routing -->
+    <base href="{{ BASE_PATH }}/">
     
     <!-- 1. Include the Universal CSS -->
-    <link rel="stylesheet" href="../static/apex-modern.css">
+    <link rel="stylesheet" href="static/apex-modern.css">
 
     <!-- 2. Include Metadata Configuration -->
-    <script src="../static/apex-config.js"></script>
-    <script src="../static/apex-core.js" defer></script>
+    <link rel="icon" id="app-favicon" href="static/favicon.svg">
+    <script src="static/apex-config.js"></script>
+
+    <script src="static/apex-core.js" defer></script>
+
 </head>
 
 <body>
@@ -22,13 +25,11 @@
         <div class="app-container">
             <div class="header-content" style="display: flex; align-items: center; width: 100%;">
                 <div style="display: flex; align-items: center; gap: var(--space-4); cursor: pointer;" onclick="window.location.hash = ''">
-                    <svg class="app-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="32" height="32" rx="6" fill="var(--brand-primary)" />
-                        <path d="M16 8L24 22H8L16 8Z" fill="white" />
-                    </svg>
+                    <img id="app-logo-img" class="app-logo" src="static/logo.svg" alt="App Logo" style="width: 32px; height: 32px; border-radius: 6px;">
                     <!-- Automatically populated class: app-title-text -->
                     <h1 class="header-title app-title-text">PLACEHOLDER TITLE</h1>
                 </div>
+
 
                 <!-- TABS CONTAINER -->
                 <nav class="app-tabs" id="app-tabs" style="margin-left: var(--space-8); flex: 1;">

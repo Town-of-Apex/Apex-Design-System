@@ -1,0 +1,11 @@
+{
+    "title": "Apex Demo App",
+    "version": "0.8.0",
+    "author": "Apex IT Security & Innovations",
+    "year": "2026",
+    "status": "Active",
+    "logo": "static/logo.svg",
+    "favicon": "static/favicon.svg",
+    "description": "Standardized Application Template for the Apex Design System"
+
+}

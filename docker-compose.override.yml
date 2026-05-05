@@ -1,0 +1,8 @@
+services:
+  apex-demo:
+    # Use volume mounts for instant code updates in development
+    volumes:
+      - .:/app
+    environment:
+      - BASE_PATH=/demo
+      - DEV_MODE=true

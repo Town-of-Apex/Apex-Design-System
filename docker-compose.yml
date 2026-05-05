@@ -1,0 +1,21 @@
+services:
+  apex-demo:
+    container_name: apex-demo
+    build: .
+    restart: unless-stopped
+    environment:
+      - BASE_PATH=/demo
+    networks:
+      - apex-internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.apex-demo.rule=PathPrefix(`/demo`)"
+      - "traefik.http.routers.apex-demo.entrypoints=web"
+      - "traefik.http.services.apex-demo.loadbalancer.server.port=8080"
+      - "traefik.docker.network=apex-internal"
+    ports:
+      - "8080:8080" # Exposed for local testing, can be removed in pure platform mode
+
+networks:
+  apex-internal:
+    external: true

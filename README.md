@@ -1,86 +1,93 @@
 # 🛡️ Apex Application Template
 
-The **Apex Application Template** is the standardized starting point for all web application development within our team. It provides a pre-configured, visually consistent "App Shell" that adheres to the **Apex Design System (v2.0)**, allowing developers to focus on functionality rather than UI plumbing.
-
----
-
-## 🚀 The Vision
-The goal of this template is to provide a "copy-and-launch" foundation. By standardizing our architecture, we ensure:
-- **Visual Consistency:** Every app feels like it belongs to the same municipal family.
-- **Rapid Prototyping:** New features can be added as simple HTML files in seconds.
-- **Interoperability:** Common auth, secret management, and package handling patterns.
-- **AI-Ready:** Standardized "Skills" ensure coding AI agents (like Antigravity) have perfect context.
+The **Apex Application Template** is the standardized starting point for all web application development within our team. It provides a pre-configured, visually consistent "App Shell" that adheres to the **Apex Design System (v2.0)** and handles the complexities of sub-path routing and containerized deployment out-of-the-box.
 
 ---
 
 ## 🏗️ Architecture Overview
 
-### 1. The Core Shell (`pages/core.html`)
-The `core.html` file is the entry point. It contains the persistent header, footer, and navigation logic. It acts as a frame that dynamically swaps out content based on the active tab.
+### 1. Project Metadata (`app_metadata.json`)
+The source of truth for project-wide information.
+- **Fields:** `title`, `version`, `author`, `logo`, and `favicon`.
+- **Usage:** Dynamically loaded by the frontend at runtime.
 
-### 2. The Application Layer (`/app`)
-For larger applications, backend logic is stored in the `/app` directory. This is where business logic, API services, and data models reside.
-- `app/main.py`: The entry point for the backend application.
-- `app/services/`: Modular services for handling data and logic.
-- `/storage`: A standardized directory for local data persistence and file uploads.
+### 2. UI Configuration (`static/apex-config.js`)
+Handles the visual structure of the app shell.
+- **Usage:** Define your navigation `tabs` here. Use paths relative to the base (e.g., `pages/home.html`).
 
-### 3. The Configuration (`static/apex-config.js`)
-Everything about your app—title, version, author, and navigation tabs—is defined here.
-```javascript
-const APEX_CONFIG = {
-    title: "My New Application",
-    tabs: [
-        { id: "home", label: "Overview", file: "home.html" },
-        // Add more tabs here...
-    ]
-};
-```
-
-### 3. Page Partials (`pages/*.html`)
-Individual pages are stored as simple HTML snippets. They should use the `.app-container` and `.stack` layout primitives for consistent alignment.
+### 3. Application Shell (`pages/core.html` & `app/main.py`)
+- **Backend:** A FastAPI server that handles `BASE_PATH` injection and serves static files.
+- **Frontend:** A Jinja2-powered HTML shell that uses a `<base>` tag for seamless sub-path routing.
 
 ---
 
-## 🛠️ Core Features
+## 🛠️ Local Development
 
-### 🧩 Standardized Component Library
-Located in `static/apex-core.js`, the system provides global UI helpers:
-- `apex.showModal(title, content, options)`: Standard and "Danger" confirmation modals.
-- `apex.showToast(message, type)`: Temporary banners for feedback.
+For the best experience, use Docker with the provided override file.
 
-### 🌓 Theme Management
-Dark and light mode are handled automatically via CSS variables and the `toggleApexTheme()` function. Preferences are persisted in local storage.
-
-### 🗺️ Dynamic Routing
-Uses URL hash routing (`#home`, `#config`). This supports page refreshes, browser back/forward navigation, and direct deep-linking to specific tabs.
-
----
-
-## 📋 Development Standards
-
-### 📦 Package Management
-We use `uv` for lightning-fast Python and package management.
-- Initialize: `uv init`
-- Add dependency: `uv add [package]`
-- Run dev server: `python -m http.server` (or `uv run python -m http.server`)
-
-### 🔑 Secret Management
-- **Never** commit secrets to version control.
-- Use the `.env` file for local development.
-- Use `.env.example` as a template for team members.
+1. **Clone the Repo.**
+2. **Create the Internal Network** (if it doesn't exist):
+   ```powershell
+   docker network create apex-internal
+   ```
+3. **Start the Dev Server:**
+   ```powershell
+   docker compose up --build
+   ```
+   *Note: This uses `docker-compose.override.yml` to volume-mount your code, meaning changes you make to HTML/JS reflect instantly without a rebuild.*
+4. **Access the App:**
+   - **Default:** `http://localhost:8080/demo/`
+   - **IMPORTANT:** Always include the trailing slash when testing sub-paths locally.
 
 ---
 
-## 🗺️ Future Roadmap
-- [ ] **MSAL Auth Integration:** Standardized Microsoft OAuth2 flow for organizational accounts.
-- [ ] **AI Agent Skills Library:** A directory of `.md` files in `ai-skills/` to provide consistent coding guidance across different LLM agents.
-- [ ] **Automated CI/CD:** Github Actions for linting and deployment.
-- [ ] **Data Visualization:** Standardized Chart.js / D3 wrappers using the Apex color palette.
+## 🚀 Deployment (VM + Traefik)
+
+To deploy on a VM behind an Apex Traefik router:
+
+1. **Update the Base Path:**
+   If you want to move the app from `/demo` to `/my-app`:
+   - **`docker-compose.yml`**: Update the `BASE_PATH` environment variable and the Traefik `PathPrefix` labels.
+   - **`.env`**: Update your `BASE_PATH` variable.
+2. **Launch in Production Mode:**
+   ```bash
+   docker compose -f docker-compose.yml up -d --build
+   ```
+   *Note: This "bakes" the code into the image for immutability.*
 
 ---
 
-## 🏁 Getting Started
-1. **Clone** this repository.
-2. **Update** `static/apex-config.js` with your app details.
-3. **Create** your pages in the `pages/` directory.
-4. **Run** `python -m http.server` and start building!
+## 🎨 Branding & Customization
+
+To update the application's look and feel:
+1. **Logo & Favicon:** Replace the files in `static/` and update the paths in `app_metadata.json`.
+2. **Navigation:** Add or remove objects in the `tabs` array in `static/apex-config.js`.
+3. **Content:** Create or edit HTML snippets in the `pages/` directory.
+
+---
+
+## 📋 Technical Stack
+- **Backend:** Python 3.13 / FastAPI (Standardized on port `8080`)
+- **Templates:** Jinja2
+- **Styling:** Apex Modern CSS (Vanilla)
+- **Deployment:** Docker / Docker Compose / Traefik
+
+## AI Agent Skills
+- apex-app-architecture (v1 complete)
+- apex-code-review (v1 complete)
+- apex-modern-ui-design (v1 complete)
+- apex-debug-and-fix (not complete)
+- apex-dependencies (not complete)
+- apex-pre-deploy (not complete)
+- apex-security (not complete)
+- apex-template-skill (v1 complete)
+
+## To-Dos for this Project
+- Add user authentication placeholder and profile system
+- Add notification system (maybe?)
+- Add Microsoft authentication stub for Azure AD integration
+- Add settings page placeholder
+- Add API starter file (maybe?)
+
+
+

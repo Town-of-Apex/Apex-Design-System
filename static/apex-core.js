@@ -33,28 +33,62 @@ document.addEventListener("DOMContentLoaded", () => {
     initTheme();
 
     // --- 2. METADATA POPULATION ---
-    const populateMetadata = () => {
-        if (typeof APEX_CONFIG === 'undefined') return;
+    window.APEX_METADATA = null;
 
-        if (APEX_CONFIG.title) {
-            document.title = APEX_CONFIG.title;
+    const populateMetadata = async () => {
+        // Fetch metadata if not already loaded
+        if (!window.APEX_METADATA) {
+            try {
+                const response = await fetch('app_metadata.json');
+
+                if (response.ok) {
+                    window.APEX_METADATA = await response.json();
+                } else {
+                    console.error("Failed to load app_metadata.json");
+                    return;
+                }
+            } catch (error) {
+                console.error("Error fetching metadata:", error);
+                return;
+            }
+        }
+
+        const meta = window.APEX_METADATA;
+
+        if (meta.title) {
+            document.title = meta.title;
         }
 
         const headerTitles = document.querySelectorAll('.app-title-text');
-        headerTitles.forEach(el => el.textContent = APEX_CONFIG.title);
+        headerTitles.forEach(el => el.textContent = meta.title || "Apex App");
 
         const versionDisplays = document.querySelectorAll('.app-version-text');
-        versionDisplays.forEach(el => el.textContent = `v${APEX_CONFIG.version}`);
+        versionDisplays.forEach(el => el.textContent = meta.version ? `v${meta.version}` : "");
+
+        if (meta.logo) {
+            const logoImg = document.getElementById('app-logo-img');
+            if (logoImg) logoImg.src = meta.logo;
+        }
+
+        if (meta.favicon) {
+            const faviconLink = document.getElementById('app-favicon');
+            if (faviconLink) faviconLink.href = meta.favicon;
+        }
 
         const footerMeta = document.querySelectorAll('.app-footer-meta');
+
         footerMeta.forEach(el => {
-            const year = APEX_CONFIG.year || new Date().getFullYear();
-            const author = APEX_CONFIG.author || "";
-            el.textContent = `${APEX_CONFIG.title} v${APEX_CONFIG.version} © ${year} ${author}`;
+            const year = meta.year || new Date().getFullYear();
+            const author = meta.author || "";
+            const title = meta.title || "Apex App";
+            const version = meta.version || "0.0.0";
+            el.textContent = `${title} v${version} © ${year} ${author}`;
         });
     };
 
+    // Initial population
     populateMetadata();
+
 
     // --- 3. TAB & ROUTING LOGIC ---
     const contentContainer = document.getElementById('app-content');
@@ -75,7 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 contentContainer.innerHTML = html;
                 
                 // Re-populate metadata for any elements in the newly loaded content
-                populateMetadata();
+                await populateMetadata();
+
                 
                 // Emit a custom event so the application can react to page loads
                 document.dispatchEvent(new CustomEvent('apex:pageLoaded', { detail: { tabId } }));
