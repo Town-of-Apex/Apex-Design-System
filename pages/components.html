@@ -1,0 +1,52 @@
+<div class="app-container">
+
+    <!-- TYPOGRAPHY SECTION -->
+        <section class="stack">
+            <p class="metadata">Components</p>
+            <h1 class="mt-2">Components</h1>
+            <p class="body-text mt-4">A collection of reusable components</p>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-subtle);">
+
+
+    <!-- ACTION SYSTEM SECTION -->
+        <section class="stack">
+            <h2 class="title-ui">Action System & Global Overlays</h2>
+            <div class="cluster mt-6">
+                <button class="btn btn-primary" onclick="apex.showModal('Standard Modal', 'This is a standardized modal template. It uses <code>apex.showModal()</code> and supports click-away dismissal.')">Primary Button</button>
+                <button class="btn btn-secondary" onclick="apex.showToast('Success Toast', 'success')">Secondary Button</button>
+                <button class="btn btn-ghost" onclick="apex.showToast('Info Toast', 'info')">Ghost Button</button>
+                <button class="btn btn-danger" onclick="apex.showModal('Danger Modal', 'Are you sure you want to permanently delete this record? This action cannot be undone.', { type: 'danger', confirmText: 'Delete Permanently', onConfirm: () => apex.showToast('Record Deleted', 'error') })">Danger Button</button>
+            </div>
+            <p class="metadata mt-4">Apex supports standardized modals (persistent/danger and standard) and temporary banner toasts.</p>
+        </section>
+
+        <!-- FORM SYSTEM -->
+        <section class="stack">
+            <h2 class="title-ui">Input & Form Styling</h2>
+            <div class="card mt-6" style="max-width: 600px;">
+                <form class="stack">
+                    <div>
+                        <label class="label">Full Name</label>
+                        <input type="text" placeholder="e.g. Alexander Hamilton">
+                    </div>
+                    <div>
+                        <label class="label">Department</label>
+                        <select>
+                            <option>Treasury</option>
+                            <option>State</option>
+                            <option>War</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="label">Notes</label>
+                        <textarea rows="4" placeholder="Enter observations..."></textarea>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Save Configuration</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+</div>

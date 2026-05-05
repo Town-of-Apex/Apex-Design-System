@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The title will be automatically populated by apex-core.js -->
+    <title>PLACEHOLDER TITLE</title>
+    
+    <!-- 1. Include the Universal CSS -->
+    <link rel="stylesheet" href="../static/apex-modern.css">
+
+    <!-- 2. Include Metadata Configuration -->
+    <script src="../static/apex-config.js"></script>
+    <script src="../static/apex-core.js" defer></script>
+</head>
+
+<body>
+
+    <!-- STANDARD HEADER (v2) -->
+    <header>
+        <div class="app-container">
+            <div class="header-content" style="display: flex; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center; gap: var(--space-4); cursor: pointer;" onclick="window.location.hash = ''">
+                    <svg class="app-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="6" fill="var(--brand-primary)" />
+                        <path d="M16 8L24 22H8L16 8Z" fill="white" />
+                    </svg>
+                    <!-- Automatically populated class: app-title-text -->
+                    <h1 class="header-title app-title-text">PLACEHOLDER TITLE</h1>
+                </div>
+
+                <!-- TABS CONTAINER -->
+                <nav class="app-tabs" id="app-tabs" style="margin-left: var(--space-8); flex: 1;">
+                    <!-- Tabs will be injected here by apex-core.js -->
+                </nav>
+
+                <!-- SETTINGS DROPDOWN -->
+                <div class="settings-dropdown" style="position: relative; margin-left: auto;">
+                    <button class="btn btn-ghost" id="settings-toggle" aria-label="Settings" style="padding: 0.5rem;">
+                        <!-- Settings Icon -->
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu" id="settings-menu">
+                        <!-- THEME TOGGLE BUTTON -->
+                        <button class="btn btn-ghost" onclick="toggleApexTheme()" aria-label="Toggle Theme" style="width: 100%; justify-content: flex-start;">
+                            <span style="display: flex; align-items: center; gap: var(--space-2);">
+                                <!-- Sun Icon (Visible in Dark Mode) -->
+                                <svg class="icon theme-toggle-icon" data-for="dark" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                                    <line x1="4.22" y1="18.36" x2="5.64" y2="16.93"></line>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                </svg>
+                                <!-- Moon Icon (Visible in Light Mode) -->
+                                <svg class="icon theme-toggle-icon" data-for="light" viewBox="0 0 24 24">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                </svg>
+                                Toggle Theme
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="section" id="app-content">
+        <!-- Content will be dynamically loaded here by apex-core.js based on selected tab -->
+        <div class="app-container">
+            <p class="text-muted">Loading application...</p>
+        </div>
+    </main>
+
+    <footer class="section" style="background: var(--bg-inner); padding-block: var(--space-8);">
+        <div class="app-container">
+            <!-- Automatically populated class: app-footer-meta -->
+            <p class="metadata app-footer-meta">PLACEHOLDER TITLE v0.0.0 &copy; 2026</p>
+        </div>
+    </footer>
+
+    <!-- GLOBAL UI ELEMENTS -->
+    <div id="global-modal-overlay" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="title-ui">Modal Title</h3>
+            </div>
+            <div class="modal-body body-text">
+                Modal content goes here.
+            </div>
+            <div class="modal-footer">
+                <!-- Buttons injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="global-toast-container" class="toast-container"></div>
+
+</body>
+
+</html>
