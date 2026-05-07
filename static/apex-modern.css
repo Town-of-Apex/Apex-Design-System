@@ -14,8 +14,8 @@
     --bg-inner: #ebecee;    /* L2: Inputs/Recessed Panels */
 
     /* --- BRAND PALETTE (v2 Upgrade + Official Town Colors) --- */
-    --brand-primary: #005f86; /* Baltic Blue */
-    --brand-primary-soft: rgba(0, 95, 134, 0.08);
+    --brand-primary: #005F86; /* Brand Teal-Blue */
+    --brand-primary-soft: rgba(0, 123, 133, 0.08);
     --brand-accent: #f1be48;  /* Sunflower Gold */
     --brand-accent-soft: rgba(241, 190, 72, 0.12);
     
@@ -71,21 +71,21 @@
 }
 
 [data-theme="dark"] {
-    --bg-canvas: #0f1113;
-    --bg-surface: #1a1d21;
-    --bg-inner: #24292e;
+    --bg-canvas: #202529;   /* Deep but neutral, avoids 'rich' blue saturation */
+    --bg-surface: #171a1d;  /* Clean L1 surface */
+    --bg-inner: #272a2e;    /* Recessed L2 */
 
-    --brand-primary: #0091ca; /* Brighter blue for dark mode visibility */
-    --brand-primary-soft: rgba(56, 189, 248, 0.12);
-    --brand-accent: #fbbf24;
-    --brand-accent-soft: rgba(251, 191, 36, 0.15);
+    --brand-primary: #005f86; /* A proper vibrant Teal-Blue for dark mode */
+    --brand-primary-soft: rgba(23, 162, 184, 0.15);
+    --brand-accent: #fcd34d;
+    --brand-accent-soft: rgba(252, 211, 77, 0.15);
 
     --text-main: #f1f5f9;
     --text-muted: #94a3b8;
-    --border-subtle: #334155;
+    --border-subtle: #2d3339;
     --border-strong: #475569;
 
-    /* Maintain brand colors but adjust for dark contrast where needed */
+    /* Maintain brand colors but adjust for dark contrast */
     --town-grey-olive: #a8a29e;
     --town-dim-grey: #94a3b8;
 }
@@ -217,7 +217,7 @@ header {
 /* Surface Level 1: Cards */
 .card {
     background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
+    /* border: 1px solid var(--border-subtle); */
     border-radius: var(--radius-card);
     padding: var(--space-9);
     transition: transform var(--duration-medium) var(--ease-standard), 
@@ -383,6 +383,12 @@ select:focus {
     width: var(--logo-size);
     height: var(--logo-size);
     flex-shrink: 0;
+    background-color: var(--brand-primary);
+    -webkit-mask: url('logo.svg') no-repeat center;
+    mask: url('logo.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    transition: background-color var(--duration-medium) var(--ease-standard);
 }
 
 /* --- TABS --- */

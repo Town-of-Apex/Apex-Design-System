@@ -1,0 +1,94 @@
+<!-- SETTINGS PAGE -->
+
+<div class="app-container">
+
+    <!-- PAGE HEADER -->
+    <section class="stack">
+        <p class="metadata">System Preferences</p>
+        <h1 class="mt-2">App Settings</h1>
+        <p class="body-text mt-4">Configure your application experience and preferences.</p>
+    </section>
+
+    <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin-block: var(--space-8);">
+        
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-12);">
+
+        <!-- SETTINGS CONTENT -->
+        <div class="stack" style="gap: var(--space-10);">
+            
+            <!-- SECTION: GENERAL -->
+            <section class="stack" style="gap: var(--space-4);">
+                <h3 class="title-ui">General</h3>
+                
+                <div class="card" style="padding: var(--space-6);">
+                    <div class="stack" style="gap: var(--space-6);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p class="label-text">Placeholder Dropdown</p>
+                                <p class="metadata">Who is the coolest Muppet?</p>
+                            </div>
+                            <select class="btn btn-secondary" style="padding: 0.5rem; width: 150px;">
+                                <option>Dr. Teeth</option>
+                                <option>Animal</option>
+                                <option>Gonzo the Great</option>
+                                <option>Rowlf the Dog</option>
+                                <option>Beaker</option>
+                                <option>Swedish Chef</option>
+                            </select>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid var(--border-subtle);">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p class="label-text">Something Else</p>
+                                <p class="metadata">This should probably have a checkbox or toggle switch or something.</p>
+                            </div>
+                            <div style="width: 40px; height: 20px; background: var(--teal-primary); border-radius: 10px; position: relative; cursor: pointer;">
+                                <div style="width: 16px; height: 16px; background: white; border-radius: 50%; position: absolute; top: 2px; right: 2px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: NOTIFICATIONS -->
+            <section class="stack" style="gap: var(--space-4);">
+                <h3 class="title-ui">Another Section</h3>
+                
+                <div class="card" style="padding: var(--space-6);">
+                    <div class="stack" style="gap: var(--space-6);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p class="label-text">Email Notifications</p>
+                                <p class="metadata">Receive emails. Woo. Hoo.</p>
+                            </div>
+                            <div style="width: 40px; height: 20px; background: var(--bg-surface-3); border-radius: 10px; position: relative; cursor: pointer;">
+                                <div style="width: 16px; height: 16px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px;"></div>
+                            </div>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid var(--border-subtle);">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p class="label-text">Even more things</p>
+                                <p class="metadata">This is getting silly.</p>
+                            </div>
+                            <div style="width: 40px; height: 20px; background: var(--teal-primary); border-radius: 10px; position: relative; cursor: pointer;">
+                                <div style="width: 16px; height: 16px; background: white; border-radius: 50%; position: absolute; top: 2px; right: 2px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--space-4); margin-top: var(--space-4);">
+                <button class="btn btn-secondary">Discard Changes</button>
+                <button class="btn btn-primary" onclick="apex.showToast('Settings saved successfully', 'success')">Save Settings</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>

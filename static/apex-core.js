@@ -66,8 +66,11 @@ document.addEventListener("DOMContentLoaded", () => {
         versionDisplays.forEach(el => el.textContent = meta.version ? `v${meta.version}` : "");
 
         if (meta.logo) {
-            const logoImg = document.getElementById('app-logo-img');
-            if (logoImg) logoImg.src = meta.logo;
+            const logoEl = document.getElementById('app-logo');
+            if (logoEl) {
+                logoEl.style.webkitMaskImage = `url('${meta.logo}')`;
+                logoEl.style.maskImage = `url('${meta.logo}')`;
+            }
         }
 
         if (meta.favicon) {
@@ -134,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typeof APEX_CONFIG !== 'undefined' && APEX_CONFIG.tabs) {
         if (APEX_CONFIG.tabs.length > 1) {
             APEX_CONFIG.tabs.forEach((tab) => {
+                if (tab.hidden) return;
                 const btn = document.createElement('button');
                 btn.className = 'tab-link';
                 btn.textContent = tab.label;
@@ -169,7 +173,43 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- 5. GLOBAL UI HELPERS (Modals, Toasts) ---
+    // --- 5. AUTHENTICATION STUB ---
+    const profileContainer = document.getElementById('user-profile');
+    const profileToggle = document.getElementById('profile-toggle');
+
+    if (profileContainer) {
+        if (typeof APEX_CONFIG !== 'undefined' && APEX_CONFIG.enableAuth === false) {
+            profileContainer.style.display = 'none';
+        } else {
+            profileContainer.style.display = 'flex';
+        }
+    }
+
+    if (profileToggle) {
+        profileToggle.addEventListener('click', () => {
+            apex.showModal('Profile Information', `
+                <div class="stack" style="gap: var(--space-4);">
+                    <div style="display: flex; align-items: center; gap: var(--space-4);">
+                        <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--bg-surface-3); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-subtle);">
+                            <svg class="icon" viewBox="0 0 24 24" style="width: 32px; height: 32px;">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="title-ui">Apex User</h3>
+                            <p class="metadata">user@townofapex.org</p>
+                        </div>
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid var(--border-subtle);">
+                    <p class="body-text">Authentication is currently in <strong>Stub Mode</strong>. In the future, this will integrate with Azure AD / Microsoft Entra ID.</p>
+                    <button class="btn btn-secondary" onclick="apex.showToast('Sign out initiated', 'info')">Sign Out</button>
+                </div>
+            `);
+        });
+    }
+
+    // --- 6. GLOBAL UI HELPERS (Modals, Toasts) ---
     window.apex = {
         /**
          * Shows a standardized modal
