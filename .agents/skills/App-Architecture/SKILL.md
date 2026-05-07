@@ -36,9 +36,15 @@ Every project MUST follow this layout:
 -   `main.py`: The entry point for the FastAPI application.
 -   `Dockerfile` & `docker-compose.yml`: Standardized containerization.
 
-## 🐍 Backend Standards (FastAPI)
-
--   **Environment Variables**: Use `os.getenv("BASE_PATH", "")` to handle sub-path routing.
+## 🐍 Backend Standards (FastAPI & SQLAlchemy)
+-   **Configuration**: Use `pydantic-settings` for all environment variables. Access via `from app.core.config import settings`.
+-   **Database Models**: All ORM models MUST inherit from `app.core.database.Base`. Do not manually define `id`, `created_at`, or `updated_at` unless specialized logic is required.
+-   **Business Logic (Services)**: Always use the `BaseService` pattern located in `app/services/base_service.py`. This provides standard CRUD functionality for free.
+-   **API Consistency**:
+    -   **Success**: All successful API responses must be wrapped in `{"success": true, "data": ...}` using `app.core.responses.ok`.
+    -   **Errors**: Never manually return a JSON error dict. Raise `app.core.exceptions.AppException`. A global exception handler ensures all errors follow the standard `{"success": false, "error": {...}}` format.
+-   **Auto-Discovery**: Do not manually import every model in `main.py` or `database.py`. The `init_db()` function uses `pkgutil` to automatically discover models in `app/models/`.
+-   **Environment Variables**: Use `settings.BASE_PATH` to handle sub-path routing.
 -   **Static Files**: Mount `static/` and `pages/` directories using `StaticFiles`.
 -   **Jinja2 Templates**: Use Jinja2 for the initial `core.html` render to inject the `BASE_PATH` into the `<base>` tag.
 -   **Port**: Applications must default to port `8080` internally.

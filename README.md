@@ -66,8 +66,38 @@ To update the application's look and feel:
 
 ---
 
+---
+
+## 🖥️ Backend System (FastAPI + SQLAlchemy)
+
+This template uses a highly abstracted, "Standardized CRUD" architecture to minimize boilerplate and ensure consistency across Apex tools.
+
+### 1. Database Foundation
+- **Base Model**: All models inherit from `app.core.database.Base`, which automatically adds `id`, `created_at`, and `updated_at` fields and generates a `__tablename__` based on the class name.
+- **Auto-Discovery**: New models placed in `app/models/` are automatically discovered and created on startup by `init_db()`.
+
+### 2. Generic CRUD Service
+We use a `BaseService` pattern to handle 90% of standard database logic.
+- **Location:** `app/services/base_service.py`
+- **Capabilities:** Standard `get`, `list`, `create`, `update`, and `delete` with built-in search and filtering.
+
+### 3. Adding a New Resource (Entity)
+To add a new feature (e.g., "Inspections"):
+1. **Model:** Create `app/models/inspection.py` (inherit from `Base`).
+2. **Schema:** Create `app/schemas/inspection.py` (Define `Create`, `Update`, and `Read` shapes).
+3. **Service:** Create `app/services/inspection_service.py` and instantiate a `BaseService`.
+4. **Route:** Create `app/api/routes/inspections.py` and register it in `app/main.py`.
+
+### 4. Consistent Responses & Error Handling
+- **Success:** Wrap returns in `ok(data)` from `app.core.responses`.
+- **Errors:** Raise `AppException("Message", status_code=400)` from `app.core.exceptions`. These are automatically formatted into a standard JSON envelope by a global exception handler.
+
+---
+
 ## 📋 Technical Stack
 - **Backend:** Python 3.13 / FastAPI (Standardized on port `8080`)
+- **Database:** SQLAlchemy 2.0 (SQLite by default, Postgres ready)
+- **Validation:** Pydantic v2 / Pydantic-Settings
 - **Templates:** Jinja2
 - **Styling:** Apex Modern CSS (Vanilla)
 - **Deployment:** Docker / Docker Compose / Traefik

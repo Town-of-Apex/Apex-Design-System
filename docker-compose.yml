@@ -5,6 +5,11 @@ services:
     restart: unless-stopped
     environment:
       - BASE_PATH=/demo
+      - DATABASE_URL=sqlite:///./data/app.db
+    volumes:
+      # Persist the SQLite database across container restarts.
+      # Switch to a postgres service + connection string to upgrade later.
+      - apex-demo-data:/app/data
     networks:
       - apex-internal
     labels:
@@ -14,7 +19,10 @@ services:
       - "traefik.http.services.apex-demo.loadbalancer.server.port=8080"
       - "traefik.docker.network=apex-internal"
     ports:
-      - "8080:8080" # Exposed for local testing, can be removed in pure platform mode
+      - "8080:8080" # Exposed for local testing; remove in pure platform mode
+
+volumes:
+  apex-demo-data:
 
 networks:
   apex-internal:

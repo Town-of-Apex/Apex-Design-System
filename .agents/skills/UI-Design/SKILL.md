@@ -19,9 +19,9 @@ All UI design work must be built upon the existing Apex baseline:
 1.  **Professional Traditionalism**: Use classic layouts and serif headers to convey authority and stability.
 2.  **Strict Left Alignment**: All text, headers, and form elements must be left-aligned. No centered content unless it's a specific modal action.
 3.  **Layered Surfaces**:
-    -   **L0 (Canvas)**: `--bg-canvas` (#f8f9fa) - The root background.
+    -   **L0 (Canvas)**: `--bg-canvas` (#f5f5f5) - The root background.
     -   **L1 (Surface)**: `--bg-surface` (#ffffff) - Cards, main containers.
-    -   **L2 (Inner)**: `--bg-inner` (#ebecee) - Recessed areas, inputs, wells.
+    -   **L2 (Inner)**: `--bg-inner` (#ededed) - Recessed areas, inputs, wells.
 4.  **No Pills**: Use a consistent 6px radius (`--radius-btn`) for buttons and 12px (`--radius-card`) for containers. Avoid fully rounded "pill" shapes.
 5.  **No Emojis**: Keep the interface professional. Use SVG icons for visual cues, not emojis.
 
