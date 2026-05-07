@@ -88,6 +88,3 @@ To update the application's look and feel:
 - Add Microsoft authentication stub for Azure AD integration
 - Add settings page placeholder
 - Add API starter file (maybe?)
-
-
-

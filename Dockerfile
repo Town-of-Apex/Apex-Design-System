@@ -21,7 +21,7 @@ RUN sed -i 's/\r$//' entrypoint.sh && chmod +x entrypoint.sh
 # Standard Apex Port
 EXPOSE 8080
 
-ENV BASE_PATH=/design
+ENV BASE_PATH=/demo
 ENV PYTHONUNBUFFERED=1
 
 ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
