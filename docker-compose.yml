@@ -19,7 +19,7 @@ services:
       - "traefik.http.services.apex-demo.loadbalancer.server.port=8080"
       - "traefik.docker.network=apex-internal"
     ports:
-      - "8080:8080" # Exposed for local testing; remove in pure platform mode
+      - "8082:8082" # Exposed for local testing; remove in pure platform mode
 
 volumes:
   apex-demo-data:
