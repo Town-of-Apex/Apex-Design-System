@@ -49,4 +49,31 @@
                 </form>
             </div>
         </section>
+        
+        <!-- SELECTION CONTROLS -->
+        <section class="stack">
+            <h2 class="title-ui">Selection & Toggles</h2>
+            <div class="card mt-6" style="max-width: 600px;">
+                <div class="stack" style="gap: var(--space-6);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <p class="label-text">Toggle Switch</p>
+                            <p class="metadata">Binary state selection (e.g. Settings)</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <hr style="border: 0; border-top: 1px solid var(--border-subtle);">
+
+                    <div style="display: flex; gap: var(--space-4); align-items: center;">
+                        <input type="checkbox" id="demo-check" checked>
+                        <label for="demo-check" class="label-text" style="margin-bottom: 0;">Standard Checkbox</label>
+                    </div>
+                </div>
+            </div>
+            <p class="metadata mt-4">Switches use the <code>.switch</code> class wrapping a checkbox input. Checkboxes use native <code>accent-color</code> for brand alignment.</p>
+        </section>
 </div>
