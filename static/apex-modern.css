@@ -5,7 +5,7 @@
   Rules: Strictly Left-Aligned, Layered Surfaces, No Pills, No Emojis.
 */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Solway:wght@400;700;800&family=Montserrat:wght@400;500;600;700&display=swap');
 
 :root {
     /* --- LAYERED SURFACES (The Contrast Rule) --- */
@@ -17,21 +17,21 @@
     /* L2: Inputs/Recessed Panels */
 
     /* --- BRAND PALETTE (v2 Upgrade + Official Town Colors) --- */
-    --brand-primary: #005F86;
-    /* Brand Teal-Blue */
-    --brand-primary-soft: rgba(0, 123, 133, 0.08);
-    --brand-accent: #f1be48;
+    --brand-primary: var(--town-forest-green);
+    /* Brand Forest Green */
+    --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+    --brand-accent: var(--town-sunflower-gold);
     /* Sunflower Gold */
-    --brand-accent-soft: rgba(241, 190, 72, 0.12);
+    --brand-accent-soft: color-mix(in srgb, var(--brand-accent) 12%, transparent);
 
     /* Official Town Palette */
     --town-grey-olive: #968c83;
     --town-dim-grey: #796e65;
-    --town-forest-green: #44883e;
-    --town-hunter-green: #44693d;
-    --town-cinnabar: #e04f39;
-    --town-baltic-blue: #005f86;
-    --town-sunflower-gold: #f1be48;
+    --town-forest-green: #3f873F;
+    --town-hunter-green: #40683C;
+    --town-cinnabar: #D75742;
+    --town-baltic-blue: #00586F;
+    --town-sunflower-gold: #F3BD48;
 
     /* --- SEMANTIC COLORS --- */
     --color-success: var(--town-forest-green);
@@ -83,11 +83,11 @@
     --bg-inner: #272a2e;
     /* Recessed L2 */
 
-    --brand-primary: #005f86;
-    /* A proper vibrant Teal-Blue for dark mode */
-    --brand-primary-soft: rgba(23, 162, 184, 0.15);
-    --brand-accent: #fcd34d;
-    --brand-accent-soft: rgba(252, 211, 77, 0.15);
+    --brand-primary: var(--town-forest-green);
+    /* Brand Forest Green */
+    --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 15%, transparent);
+    --brand-accent: var(--town-sunflower-gold);
+    --brand-accent-soft: color-mix(in srgb, var(--brand-accent) 15%, transparent);
 
     --text-main: #f1f5f9;
     --text-muted: #94a3b8;
@@ -108,7 +108,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-canvas);
     color: var(--text-main);
     line-height: 1.5;
@@ -136,8 +136,8 @@ h1 {
 h2,
 h3,
 .title-ui {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
     margin: 0;
     color: var(--text-main);
     text-align: left;
@@ -355,16 +355,16 @@ input[type="radio"] {
     border-radius: 4px;
 }
 
-input:checked + .switch-slider {
+input:checked+.switch-slider {
     background-color: var(--brand-primary);
     border-color: var(--brand-primary);
 }
 
-input:focus-visible + .switch-slider {
+input:focus-visible+.switch-slider {
     box-shadow: 0 0 0 3px var(--brand-primary-soft);
 }
 
-input:checked + .switch-slider:before {
+input:checked+.switch-slider:before {
     transform: translateX(20px);
 }
 
@@ -402,8 +402,8 @@ input:checked + .switch-slider:before {
 }
 
 .btn-primary:hover {
-    background: #004a5c;
-    box-shadow: 0 4px 12px rgba(0, 90, 112, 0.2);
+    background: var(--town-hunter-green);
+    box-shadow: 0 4px 12px rgba(68, 105, 61, 0.2);
 }
 
 .btn-secondary {
@@ -510,7 +510,7 @@ input:checked + .switch-slider:before {
 }
 
 .bg-baltic-soft {
-    background: var(--brand-primary-soft);
+    background: rgba(0, 95, 134, 0.08);
 }
 
 .border-forest {

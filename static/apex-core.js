@@ -32,6 +32,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initTheme();
 
+    // --- 1B. BRAND COLOR MANAGEMENT ---
+    const applyBrandColor = (type, colorVariable) => {
+        if (type === 'primary') {
+            document.documentElement.style.setProperty('--brand-primary', `var(--town-${colorVariable})`);
+            localStorage.setItem('apex-primary-color', colorVariable);
+        } else if (type === 'accent') {
+            document.documentElement.style.setProperty('--brand-accent', `var(--town-${colorVariable})`);
+            localStorage.setItem('apex-accent-color', colorVariable);
+        }
+    };
+
+    window.updateAppColor = (type, selectElement) => {
+        applyBrandColor(type, selectElement.value);
+    };
+
+    const initBrandColors = () => {
+        const primary = localStorage.getItem('apex-primary-color');
+        if (primary) applyBrandColor('primary', primary);
+        
+        const accent = localStorage.getItem('apex-accent-color');
+        if (accent) applyBrandColor('accent', accent);
+    };
+    initBrandColors();
+
+    document.addEventListener('apex:pageLoaded', (e) => {
+        if (e.detail.tabId === 'settings') {
+            const primarySelect = document.getElementById('setting-primary-color');
+            const accentSelect = document.getElementById('setting-accent-color');
+            
+            const savedPrimary = localStorage.getItem('apex-primary-color') || 'forest-green';
+            const savedAccent = localStorage.getItem('apex-accent-color') || 'sunflower-gold';
+            
+            if (primarySelect) primarySelect.value = savedPrimary;
+            if (accentSelect) accentSelect.value = savedAccent;
+        }
+    });
+
     // --- 2. METADATA POPULATION ---
     window.APEX_METADATA = null;
 

@@ -16,6 +16,47 @@
         <!-- SETTINGS CONTENT -->
         <div class="stack" style="gap: var(--space-10);">
             
+            <!-- SECTION: APPEARANCE -->
+            <section class="stack" style="gap: var(--space-4);">
+                <h3 class="title-ui">Appearance & Theme</h3>
+                
+                <div class="card" style="padding: var(--space-6);">
+                    <div class="stack" style="gap: var(--space-6);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p class="label-text">Primary App Color</p>
+                                <p class="metadata">Main brand color for the application.</p>
+                            </div>
+                            <select class="btn btn-secondary" style="padding: 0.5rem; width: 150px;" onchange="updateAppColor('primary', this)" id="setting-primary-color">
+                                <option value="forest-green">Forest Green</option>
+                                <option value="hunter-green">Hunter Green</option>
+                                <option value="baltic-blue">Baltic Blue</option>
+                                <option value="sunflower-gold">Sunflower Gold</option>
+                                <option value="cinnabar">Cinnabar</option>
+                                <option value="grey-olive">Grey Olive</option>
+                            </select>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid var(--border-subtle);">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p class="label-text">Accent Color</p>
+                                <p class="metadata">Color used for highlights and warnings.</p>
+                            </div>
+                            <select class="btn btn-secondary" style="padding: 0.5rem; width: 150px;" onchange="updateAppColor('accent', this)" id="setting-accent-color">
+                                <option value="sunflower-gold">Sunflower Gold</option>
+                                <option value="forest-green">Forest Green</option>
+                                <option value="hunter-green">Hunter Green</option>
+                                <option value="baltic-blue">Baltic Blue</option>
+                                <option value="cinnabar">Cinnabar</option>
+                                <option value="grey-olive">Grey Olive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- SECTION: GENERAL -->
             <section class="stack" style="gap: var(--space-4);">
                 <h3 class="title-ui">General</h3>
