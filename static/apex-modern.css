@@ -550,7 +550,7 @@ input:checked+.switch-slider:before {
     transition: background-color var(--duration-medium) var(--ease-standard);
 }
 
-/* --- TABS --- */
+/* --- TABS & SIDEBAR LINKS --- */
 .app-tabs {
     display: flex;
     gap: var(--space-2);
@@ -575,6 +575,34 @@ input:checked+.switch-slider:before {
 }
 
 .tab-link.active {
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
+}
+
+.sidebar-link {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    text-decoration: none;
+    text-align: left;
+    width: 100%;
+    transition: all var(--duration-fast) var(--ease-standard);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.sidebar-link:hover {
+    color: var(--text-main);
+    background: var(--bg-inner);
+}
+
+.sidebar-link.active {
     color: var(--brand-primary);
     background: var(--brand-primary-soft);
 }

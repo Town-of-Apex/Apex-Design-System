@@ -5,6 +5,7 @@
  */
 const APEX_CONFIG = {
     enableAuth: true,
+    navigationStyle: 'both', // 'header', 'sidebar', or 'both'
     tabs: [
         { id: "home", label: "Home", file: "pages/home.html" },
         { id: "permits", label: "Permits", file: "pages/permits.html" },

@@ -133,12 +133,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 3. TAB & ROUTING LOGIC ---
     const contentContainer = document.getElementById('app-content');
     const tabsContainer = document.getElementById('app-tabs');
+    const sidebarContainer = document.getElementById('app-sidebar');
+    const sidebarNav = document.getElementById('sidebar-nav');
+
+    const navStyle = (typeof APEX_CONFIG !== 'undefined' && APEX_CONFIG.navigationStyle) ? APEX_CONFIG.navigationStyle : 'header';
 
     const loadTab = async (tabId, fileUrl) => {
         if (!contentContainer) return;
 
         // Update active state in UI
-        document.querySelectorAll('.tab-link').forEach(btn => {
+        document.querySelectorAll('.tab-link, .sidebar-link').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
         });
 
@@ -148,6 +152,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 const html = await response.text();
                 contentContainer.innerHTML = html;
                 
+                // Clear the sidebar on new page loads if it's meant to be page-specific
+                if (navStyle === 'header' && sidebarContainer) {
+                    sidebarContainer.style.display = 'none';
+                    if (sidebarNav) sidebarNav.innerHTML = '';
+                }
+
                 // Re-populate metadata for any elements in the newly loaded content
                 await populateMetadata();
 
@@ -175,18 +185,40 @@ document.addEventListener("DOMContentLoaded", () => {
         if (APEX_CONFIG.tabs.length > 1) {
             APEX_CONFIG.tabs.forEach((tab) => {
                 if (tab.hidden) return;
-                const btn = document.createElement('button');
-                btn.className = 'tab-link';
-                btn.textContent = tab.label;
-                btn.setAttribute('data-tab', tab.id);
-                btn.onclick = () => window.location.hash = tab.id;
-                if (tabsContainer) tabsContainer.appendChild(btn);
+                
+                // Header Tabs
+                if (navStyle === 'header' || navStyle === 'both') {
+                    const btn = document.createElement('button');
+                    btn.className = 'tab-link';
+                    btn.textContent = tab.label;
+                    btn.setAttribute('data-tab', tab.id);
+                    btn.onclick = () => window.location.hash = tab.id;
+                    if (tabsContainer) tabsContainer.appendChild(btn);
+                }
+
+                // Sidebar Links
+                if (navStyle === 'sidebar' || navStyle === 'both') {
+                    const sBtn = document.createElement('button');
+                    sBtn.className = 'sidebar-link';
+                    sBtn.textContent = tab.label;
+                    sBtn.setAttribute('data-tab', tab.id);
+                    sBtn.onclick = () => window.location.hash = tab.id;
+                    if (sidebarNav) sidebarNav.appendChild(sBtn);
+                }
             });
+            
+            if (navStyle === 'sidebar' && tabsContainer) {
+                tabsContainer.style.display = 'none';
+            }
+            if ((navStyle === 'sidebar' || navStyle === 'both') && sidebarContainer) {
+                sidebarContainer.style.display = 'flex';
+            }
             
             window.addEventListener('hashchange', handleRoute);
             handleRoute(); // Initialize on load
         } else {
             if (tabsContainer) tabsContainer.style.display = 'none';
+            if (sidebarContainer) sidebarContainer.style.display = 'none';
             if (APEX_CONFIG.tabs.length === 1) {
                  loadTab(APEX_CONFIG.tabs[0].id, APEX_CONFIG.tabs[0].file);
             }
@@ -328,6 +360,38 @@ document.addEventListener("DOMContentLoaded", () => {
                 toast.classList.add('toast-out');
                 setTimeout(() => toast.remove(), 300);
             }, duration);
+        },
+
+        /**
+         * Dynamically populates the sidebar with custom items for page-specific sub-navigation.
+         * @param {Array} items - Array of { id, label, onClick, active } objects. Pass null to hide sidebar.
+         */
+        setSidebar: (items) => {
+            const sidebarContainer = document.getElementById('app-sidebar');
+            const sidebarNav = document.getElementById('sidebar-nav');
+            if (!sidebarContainer || !sidebarNav) return;
+
+            if (!items || items.length === 0) {
+                sidebarContainer.style.display = 'none';
+                return;
+            }
+
+            sidebarNav.innerHTML = '';
+            items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = `sidebar-link ${item.active ? 'active' : ''}`;
+                btn.textContent = item.label;
+                if (item.id) btn.setAttribute('data-sidebar-id', item.id);
+                
+                btn.onclick = (e) => {
+                    // Visually update active state
+                    sidebarNav.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    if (item.onClick) item.onClick(e, item);
+                };
+                sidebarNav.appendChild(btn);
+            });
+            sidebarContainer.style.display = 'flex';
         }
     };
 

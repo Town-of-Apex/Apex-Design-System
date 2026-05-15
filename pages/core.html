@@ -96,20 +96,33 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT AREA -->
-    <main class="section" id="app-content">
-        <!-- Content will be dynamically loaded here by apex-core.js based on selected tab -->
-        <div class="app-container">
-            <p class="text-muted">Loading application...</p>
-        </div>
-    </main>
+    <!-- MAIN LAYOUT WRAPPER -->
+    <div class="app-body-wrapper" style="display: flex; flex: 1; min-height: calc(100vh - var(--header-height));">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar" id="app-sidebar" style="display: none; width: 250px; border-right: 1px solid var(--border-subtle); background: var(--bg-surface); flex-direction: column; flex-shrink: 0;">
+            <nav class="sidebar-nav stack" id="sidebar-nav" style="padding: var(--space-4); gap: var(--space-1);">
+                <!-- Links will be injected here by apex-core.js -->
+            </nav>
+        </aside>
 
-    <footer class="app-footer">
-        <div class="app-container">
-            <!-- Automatically populated class: app-footer-meta -->
-            <p class="metadata app-footer-meta">PLACEHOLDER TITLE v0.0.0 &copy; 2026</p>
+        <!-- MAIN CONTENT AREA -->
+        <div class="app-content-wrapper" style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
+            <main class="section" id="app-content" style="flex: 1;">
+                <!-- Content will be dynamically loaded here by apex-core.js based on selected tab -->
+                <div class="app-container">
+                    <p class="text-muted">Loading application...</p>
+                </div>
+            </main>
+
+            <footer class="app-footer">
+                <div class="app-container">
+                    <!-- Automatically populated class: app-footer-meta -->
+                    <p class="metadata app-footer-meta">PLACEHOLDER TITLE v0.0.0 &copy; 2026</p>
+                </div>
+            </footer>
         </div>
-    </footer>
+    </div>
 
     <!-- GLOBAL UI ELEMENTS -->
     <div id="global-modal-overlay" class="modal-overlay">
