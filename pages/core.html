@@ -100,10 +100,18 @@
     <div class="app-body-wrapper" style="display: flex; flex: 1; min-height: calc(100vh - var(--header-height));">
         
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="app-sidebar" id="app-sidebar" style="display: none; width: 250px; border-right: 1px solid var(--border-subtle); background: var(--bg-surface); flex-direction: column; flex-shrink: 0;">
-            <nav class="sidebar-nav stack" id="sidebar-nav" style="padding: var(--space-4); gap: var(--space-1);">
+        <aside class="app-sidebar" id="app-sidebar" style="display: none;">
+            <nav class="sidebar-nav stack" id="sidebar-nav">
                 <!-- Links will be injected here by apex-core.js -->
             </nav>
+            <!-- Resizer handle -->
+            <div class="sidebar-resizer" id="sidebar-resizer"></div>
+            <!-- Collapse/Expand floating toggle button -->
+            <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
         </aside>
 
         <!-- MAIN CONTENT AREA -->

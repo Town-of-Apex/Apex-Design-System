@@ -550,6 +550,117 @@ input:checked+.switch-slider:before {
     transition: background-color var(--duration-medium) var(--ease-standard);
 }
 
+/* --- APP LAYOUT & SIDEBAR --- */
+.app-sidebar {
+    width: 250px;
+    border-right: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: relative;
+    transition: width var(--duration-medium) var(--ease-standard), border-color var(--duration-medium) var(--ease-standard);
+}
+
+.app-sidebar.resizing {
+    transition: none !important;
+}
+
+.app-sidebar.collapsed {
+    width: 0px !important;
+    min-width: 0px !important;
+    border-right-color: transparent !important;
+}
+
+.sidebar-nav {
+    padding: var(--space-4);
+    gap: var(--space-1);
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+/* Resizer Handle */
+.sidebar-resizer {
+    position: absolute;
+    top: 0;
+    right: -4px;
+    width: 8px;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 10;
+    background: transparent;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.sidebar-resizer:hover,
+.sidebar-resizer.resizing {
+    background-color: var(--brand-primary-soft);
+}
+
+.app-sidebar.collapsed .sidebar-resizer {
+    display: none;
+}
+
+/* Floating Collapse/Expand Button */
+.sidebar-toggle-btn {
+    position: fixed;
+    bottom: 40px;
+    left: calc(var(--sidebar-width, 250px) - 12px);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-strong);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 20;
+    transition: all var(--duration-fast) var(--ease-standard);
+    padding: 0;
+    opacity: 0.6;
+}
+
+.sidebar-toggle-btn:hover {
+    background: var(--brand-primary);
+    color: white;
+    border-color: var(--brand-primary);
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.sidebar-toggle-btn .icon {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2.5;
+    transition: transform var(--duration-medium) var(--ease-standard);
+}
+
+/* Disable toggle button transition during active dragging/resizing */
+.app-sidebar.resizing .sidebar-toggle-btn {
+    transition: none !important;
+}
+
+/* Adjust toggle button positioning and rotation when collapsed */
+.app-sidebar.collapsed .sidebar-toggle-btn {
+    left: 8px;
+    opacity: 0.8;
+}
+
+.app-sidebar.collapsed .sidebar-toggle-btn:hover {
+    opacity: 1;
+}
+
+.app-sidebar.collapsed .sidebar-toggle-btn .icon {
+    transform: rotate(180deg);
+}
+
 /* --- TABS & SIDEBAR LINKS --- */
 .app-tabs {
     display: flex;

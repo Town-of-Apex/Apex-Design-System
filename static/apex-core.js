@@ -3,12 +3,12 @@
  * Handles automatic population of project metadata and Theme Management (Dark/Light)
  */
 document.addEventListener("DOMContentLoaded", () => {
-    
+
     // --- 1. THEME MANAGEMENT ---
     const initTheme = () => {
         const savedTheme = localStorage.getItem('apex-theme');
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
+
         const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
         updateThemeToggleUI(theme);
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.toggleApexTheme = () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
+
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('apex-theme', newTheme);
         updateThemeToggleUI(newTheme);
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initTheme();
 
     // --- 1B. BRAND COLOR MANAGEMENT & SETTINGS SYSTEM ---
-    
+
     // Preview function (only updates CSS variables on the document, does not write to localStorage)
     const previewBrandColor = (type, colorVariable) => {
         if (type === 'primary') {
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.saveSettings = () => {
         const current = getCurrentSettingsFromUI();
-        
+
         // Save to localStorage
         localStorage.setItem('apex-primary-color', current['primary-color']);
         localStorage.setItem('apex-accent-color', current['accent-color']);
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.discardSettingsChanges = () => {
         if (!initialSettings) return;
-        
+
         // Re-populate UI
         const primarySelect = document.getElementById('setting-primary-color');
         const accentSelect = document.getElementById('setting-accent-color');
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 const html = await response.text();
                 contentContainer.innerHTML = html;
-                
+
                 // Clear the sidebar on new page loads if it's meant to be page-specific
                 if (navStyle === 'header' && sidebarContainer) {
                     sidebarContainer.style.display = 'none';
@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // Track the successfully loaded tab ID
                 currentTabId = tabId;
-                
+
                 // Emit a custom event so the application can react to page loads
                 document.dispatchEvent(new CustomEvent('apex:pageLoaded', { detail: { tabId } }));
             } else {
@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const tab = APEX_CONFIG.tabs.find(t => t.id === hash) || APEX_CONFIG.tabs[0];
-        
+
         if (tab) {
             loadTab(tab.id, tab.file);
         }
@@ -336,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (APEX_CONFIG.tabs.length > 1) {
             APEX_CONFIG.tabs.forEach((tab) => {
                 if (tab.hidden) return;
-                
+
                 // Header Tabs
                 if (navStyle === 'header' || navStyle === 'both') {
                     const btn = document.createElement('button');
@@ -357,21 +357,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (sidebarNav) sidebarNav.appendChild(sBtn);
                 }
             });
-            
+
             if (navStyle === 'sidebar' && tabsContainer) {
                 tabsContainer.style.display = 'none';
             }
             if ((navStyle === 'sidebar' || navStyle === 'both') && sidebarContainer) {
                 sidebarContainer.style.display = 'flex';
             }
-            
+
             window.addEventListener('hashchange', handleRoute);
             handleRoute(); // Initialize on load
         } else {
             if (tabsContainer) tabsContainer.style.display = 'none';
             if (sidebarContainer) sidebarContainer.style.display = 'none';
             if (APEX_CONFIG.tabs.length === 1) {
-                 loadTab(APEX_CONFIG.tabs[0].id, APEX_CONFIG.tabs[0].file);
+                loadTab(APEX_CONFIG.tabs[0].id, APEX_CONFIG.tabs[0].file);
             }
         }
     }
@@ -379,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 4. DROPDOWN LOGIC ---
     const settingsToggle = document.getElementById('settings-toggle');
     const settingsMenu = document.getElementById('settings-menu');
-    
+
     if (settingsToggle && settingsMenu) {
         settingsToggle.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -455,10 +455,10 @@ document.addEventListener("DOMContentLoaded", () => {
             closeBtn.style.fontSize = '1.5rem';
             closeBtn.onclick = () => apex.hideModal();
             overlay.querySelector('.modal-header').appendChild(closeBtn);
-            
+
             if (options.type === 'danger') {
                 overlay.setAttribute('data-persistent', 'true'); // Don't close on click-away
-                
+
                 const cancelBtn = document.createElement('button');
                 cancelBtn.className = 'btn btn-secondary';
                 cancelBtn.textContent = 'Cancel';
@@ -504,7 +504,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const toast = document.createElement('div');
             toast.className = `toast toast--${type}`;
             toast.innerHTML = `<span>${message}</span>`;
-            
+
             container.appendChild(toast);
 
             setTimeout(() => {
@@ -533,7 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 btn.className = `sidebar-link ${item.active ? 'active' : ''}`;
                 btn.textContent = item.label;
                 if (item.id) btn.setAttribute('data-sidebar-id', item.id);
-                
+
                 btn.onclick = (e) => {
                     // Visually update active state
                     sidebarNav.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
@@ -587,4 +587,93 @@ document.addEventListener("DOMContentLoaded", () => {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     };
+
+    // --- 7. SIDEBAR RESIZER & COLLAPSIBLE SYSTEM ---
+    const initSidebarSystem = () => {
+        const sidebar = document.getElementById('app-sidebar');
+        const resizer = document.getElementById('sidebar-resizer');
+        const toggleBtn = document.getElementById('sidebar-toggle-btn');
+
+        if (!sidebar || !resizer || !toggleBtn) return;
+
+        let isResizing = false;
+        let startWidth = 250;
+        let startX = 0;
+
+        // Load saved state from localStorage
+        const savedWidth = localStorage.getItem('apex-sidebar-width');
+        const savedCollapsed = localStorage.getItem('apex-sidebar-collapsed') === 'true';
+
+        // Initialize width (default 250px)
+        let currentWidth = savedWidth ? parseInt(savedWidth, 10) : 250;
+        currentWidth = Math.max(160, Math.min(currentWidth, 450));
+
+        // Apply initial state
+        if (savedCollapsed) {
+            sidebar.classList.add('collapsed');
+            sidebar.style.width = '0px';
+            sidebar.style.setProperty('--sidebar-width', '0px');
+        } else {
+            sidebar.style.width = `${currentWidth}px`;
+            sidebar.style.setProperty('--sidebar-width', `${currentWidth}px`);
+        }
+
+        // 1. Drag to Resize Logic
+        resizer.addEventListener('mousedown', (e) => {
+            if (sidebar.classList.contains('collapsed')) return;
+            isResizing = true;
+            startX = e.clientX;
+            startWidth = sidebar.getBoundingClientRect().width;
+
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+            resizer.classList.add('resizing');
+            sidebar.classList.add('resizing');
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+
+            const deltaX = e.clientX - startX;
+            let newWidth = startWidth + deltaX;
+
+            // Clamp sidebar width between 160px and 450px
+            newWidth = Math.max(160, Math.min(newWidth, 450));
+
+            sidebar.style.width = `${newWidth}px`;
+            sidebar.style.setProperty('--sidebar-width', `${newWidth}px`);
+            currentWidth = newWidth;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (!isResizing) return;
+            isResizing = false;
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            resizer.classList.remove('resizing');
+            sidebar.classList.remove('resizing');
+
+            // Save width preference
+            localStorage.setItem('apex-sidebar-width', currentWidth);
+        });
+
+        // 2. Toggle Collapse Logic
+        const toggleSidebar = () => {
+            const isCollapsed = sidebar.classList.toggle('collapsed');
+            localStorage.setItem('apex-sidebar-collapsed', isCollapsed);
+
+            if (isCollapsed) {
+                sidebar.style.width = '0px';
+                sidebar.style.setProperty('--sidebar-width', '0px');
+            } else {
+                sidebar.style.width = `${currentWidth}px`;
+                sidebar.style.setProperty('--sidebar-width', `${currentWidth}px`);
+            }
+        };
+
+        toggleBtn.addEventListener('click', toggleSidebar);
+    };
+
+    // Initialize sidebar system
+    initSidebarSystem();
 });
