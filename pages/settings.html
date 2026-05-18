@@ -68,13 +68,13 @@
                                 <p class="label-text">Placeholder Dropdown</p>
                                 <p class="metadata">Who is the coolest Muppet?</p>
                             </div>
-                            <select class="btn btn-secondary" style="padding: 0.5rem; width: 150px;">
-                                <option>Dr. Teeth</option>
-                                <option>Animal</option>
-                                <option>Gonzo the Great</option>
-                                <option>Rowlf the Dog</option>
-                                <option>Beaker</option>
-                                <option>Swedish Chef</option>
+                            <select class="btn btn-secondary" style="padding: 0.5rem; width: 150px;" id="setting-coolest-muppet">
+                                <option value="Dr. Teeth">Dr. Teeth</option>
+                                <option value="Animal">Animal</option>
+                                <option value="Gonzo the Great">Gonzo the Great</option>
+                                <option value="Rowlf the Dog">Rowlf the Dog</option>
+                                <option value="Beaker">Beaker</option>
+                                <option value="Swedish Chef">Swedish Chef</option>
                             </select>
                         </div>
 
@@ -86,7 +86,7 @@
                                 <p class="metadata">This should probably have a checkbox or toggle switch or something.</p>
                             </div>
                             <label class="switch">
-                                <input type="checkbox" checked>
+                                <input type="checkbox" id="setting-something-else" checked>
                                 <span class="switch-slider"></span>
                             </label>
                         </div>
@@ -106,7 +106,7 @@
                                 <p class="metadata">Receive emails. Woo. Hoo.</p>
                             </div>
                             <label class="switch">
-                                <input type="checkbox">
+                                <input type="checkbox" id="setting-email-notifications">
                                 <span class="switch-slider"></span>
                             </label>
                         </div>
@@ -119,7 +119,7 @@
                                 <p class="metadata">This is getting silly.</p>
                             </div>
                             <label class="switch">
-                                <input type="checkbox" checked>
+                                <input type="checkbox" id="setting-even-more-things" checked>
                                 <span class="switch-slider"></span>
                             </label>
                         </div>
@@ -128,8 +128,8 @@
             </section>
 
             <div style="display: flex; justify-content: flex-end; gap: var(--space-4); margin-top: var(--space-4);">
-                <button class="btn btn-secondary">Discard Changes</button>
-                <button class="btn btn-primary" onclick="apex.showToast('Settings saved successfully', 'success')">Save Settings</button>
+                <button class="btn btn-secondary" onclick="discardSettingsChanges()">Discard Changes</button>
+                <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
             </div>
 
         </div>

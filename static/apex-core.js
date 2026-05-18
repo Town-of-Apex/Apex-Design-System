@@ -32,40 +32,162 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initTheme();
 
-    // --- 1B. BRAND COLOR MANAGEMENT ---
-    const applyBrandColor = (type, colorVariable) => {
+    // --- 1B. BRAND COLOR MANAGEMENT & SETTINGS SYSTEM ---
+    
+    // Preview function (only updates CSS variables on the document, does not write to localStorage)
+    const previewBrandColor = (type, colorVariable) => {
         if (type === 'primary') {
             document.documentElement.style.setProperty('--brand-primary', `var(--town-${colorVariable})`);
-            localStorage.setItem('apex-primary-color', colorVariable);
         } else if (type === 'accent') {
             document.documentElement.style.setProperty('--brand-accent', `var(--town-${colorVariable})`);
-            localStorage.setItem('apex-accent-color', colorVariable);
         }
     };
 
+    // Live preview when changing colors on the settings page
     window.updateAppColor = (type, selectElement) => {
-        applyBrandColor(type, selectElement.value);
+        previewBrandColor(type, selectElement.value);
+        checkSettingsDirty();
     };
 
+    // Load and apply saved colors
     const initBrandColors = () => {
-        const primary = localStorage.getItem('apex-primary-color');
-        if (primary) applyBrandColor('primary', primary);
-        
-        const accent = localStorage.getItem('apex-accent-color');
-        if (accent) applyBrandColor('accent', accent);
+        const primary = localStorage.getItem('apex-primary-color') || 'forest-green';
+        const accent = localStorage.getItem('apex-accent-color') || 'sunflower-gold';
+        previewBrandColor('primary', primary);
+        previewBrandColor('accent', accent);
     };
     initBrandColors();
 
+    // Global settings state
+    let initialSettings = null;
+    let hasUnsavedChanges = false;
+
+    const getSavedSettings = () => {
+        return {
+            'primary-color': localStorage.getItem('apex-primary-color') || 'forest-green',
+            'accent-color': localStorage.getItem('apex-accent-color') || 'sunflower-gold',
+            'coolest-muppet': localStorage.getItem('apex-coolest-muppet') || 'Dr. Teeth',
+            'something-else': localStorage.getItem('apex-something-else') !== 'false', // default true
+            'email-notifications': localStorage.getItem('apex-email-notifications') === 'true', // default false
+            'even-more-things': localStorage.getItem('apex-even-more-things') !== 'false' // default true
+        };
+    };
+
+    const getCurrentSettingsFromUI = () => {
+        const primarySelect = document.getElementById('setting-primary-color');
+        const accentSelect = document.getElementById('setting-accent-color');
+        const muppetSelect = document.getElementById('setting-coolest-muppet');
+        const somethingElse = document.getElementById('setting-something-else');
+        const emailNotifications = document.getElementById('setting-email-notifications');
+        const evenMoreThings = document.getElementById('setting-even-more-things');
+
+        return {
+            'primary-color': primarySelect ? primarySelect.value : 'forest-green',
+            'accent-color': accentSelect ? accentSelect.value : 'sunflower-gold',
+            'coolest-muppet': muppetSelect ? muppetSelect.value : 'Dr. Teeth',
+            'something-else': somethingElse ? somethingElse.checked : true,
+            'email-notifications': emailNotifications ? emailNotifications.checked : false,
+            'even-more-things': evenMoreThings ? evenMoreThings.checked : true
+        };
+    };
+
+    const checkSettingsDirty = () => {
+        if (!initialSettings) return;
+        const current = getCurrentSettingsFromUI();
+        let changed = false;
+        for (const key in initialSettings) {
+            if (initialSettings[key] !== current[key]) {
+                changed = true;
+                break;
+            }
+        }
+        hasUnsavedChanges = changed;
+    };
+
+    window.saveSettings = () => {
+        const current = getCurrentSettingsFromUI();
+        
+        // Save to localStorage
+        localStorage.setItem('apex-primary-color', current['primary-color']);
+        localStorage.setItem('apex-accent-color', current['accent-color']);
+        localStorage.setItem('apex-coolest-muppet', current['coolest-muppet']);
+        localStorage.setItem('apex-something-else', current['something-else']);
+        localStorage.setItem('apex-email-notifications', current['email-notifications']);
+        localStorage.setItem('apex-even-more-things', current['even-more-things']);
+
+        // Apply colors
+        previewBrandColor('primary', current['primary-color']);
+        previewBrandColor('accent', current['accent-color']);
+
+        initialSettings = current;
+        hasUnsavedChanges = false;
+
+        apex.showToast('Settings saved successfully', 'success');
+    };
+
+    window.discardSettingsChanges = () => {
+        if (!initialSettings) return;
+        
+        // Re-populate UI
+        const primarySelect = document.getElementById('setting-primary-color');
+        const accentSelect = document.getElementById('setting-accent-color');
+        const muppetSelect = document.getElementById('setting-coolest-muppet');
+        const somethingElse = document.getElementById('setting-something-else');
+        const emailNotifications = document.getElementById('setting-email-notifications');
+        const evenMoreThings = document.getElementById('setting-even-more-things');
+
+        if (primarySelect) primarySelect.value = initialSettings['primary-color'];
+        if (accentSelect) accentSelect.value = initialSettings['accent-color'];
+        if (muppetSelect) muppetSelect.value = initialSettings['coolest-muppet'];
+        if (somethingElse) somethingElse.checked = initialSettings['something-else'];
+        if (emailNotifications) emailNotifications.checked = initialSettings['email-notifications'];
+        if (evenMoreThings) evenMoreThings.checked = initialSettings['even-more-things'];
+
+        // Revert previews
+        previewBrandColor('primary', initialSettings['primary-color']);
+        previewBrandColor('accent', initialSettings['accent-color']);
+
+        hasUnsavedChanges = false;
+        apex.showToast('Changes discarded', 'info');
+    };
+
+    // Watch for browser close / refresh with unsaved changes
+    window.addEventListener('beforeunload', (e) => {
+        if (hasUnsavedChanges) {
+            e.preventDefault();
+            e.returnValue = ''; // Standard modern browser way to trigger unload confirmation dialog
+        }
+    });
+
     document.addEventListener('apex:pageLoaded', (e) => {
         if (e.detail.tabId === 'settings') {
+            const saved = getSavedSettings();
+
             const primarySelect = document.getElementById('setting-primary-color');
             const accentSelect = document.getElementById('setting-accent-color');
-            
-            const savedPrimary = localStorage.getItem('apex-primary-color') || 'forest-green';
-            const savedAccent = localStorage.getItem('apex-accent-color') || 'sunflower-gold';
-            
-            if (primarySelect) primarySelect.value = savedPrimary;
-            if (accentSelect) accentSelect.value = savedAccent;
+            const muppetSelect = document.getElementById('setting-coolest-muppet');
+            const somethingElse = document.getElementById('setting-something-else');
+            const emailNotifications = document.getElementById('setting-email-notifications');
+            const evenMoreThings = document.getElementById('setting-even-more-things');
+
+            if (primarySelect) primarySelect.value = saved['primary-color'];
+            if (accentSelect) accentSelect.value = saved['accent-color'];
+            if (muppetSelect) muppetSelect.value = saved['coolest-muppet'];
+            if (somethingElse) somethingElse.checked = saved['something-else'];
+            if (emailNotifications) emailNotifications.checked = saved['email-notifications'];
+            if (evenMoreThings) evenMoreThings.checked = saved['even-more-things'];
+
+            initialSettings = getCurrentSettingsFromUI();
+            hasUnsavedChanges = false;
+
+            // Attach event listeners to all settings fields
+            const inputs = [primarySelect, accentSelect, muppetSelect, somethingElse, emailNotifications, evenMoreThings];
+            inputs.forEach(input => {
+                if (input) {
+                    input.addEventListener('change', checkSettingsDirty);
+                    input.addEventListener('input', checkSettingsDirty);
+                }
+            });
         }
     });
 
@@ -138,6 +260,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const navStyle = (typeof APEX_CONFIG !== 'undefined' && APEX_CONFIG.navigationStyle) ? APEX_CONFIG.navigationStyle : 'header';
 
+    let currentTabId = null;
+
     const loadTab = async (tabId, fileUrl) => {
         if (!contentContainer) return;
 
@@ -161,6 +285,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Re-populate metadata for any elements in the newly loaded content
                 await populateMetadata();
 
+                // Track the successfully loaded tab ID
+                currentTabId = tabId;
                 
                 // Emit a custom event so the application can react to page loads
                 document.dispatchEvent(new CustomEvent('apex:pageLoaded', { detail: { tabId } }));
@@ -172,8 +298,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    let isRevertingHash = false;
     const handleRoute = () => {
-        const hash = window.location.hash.replace('#', '');
+        if (isRevertingHash) {
+            isRevertingHash = false;
+            return;
+        }
+
+        const hash = window.location.hash.replace('#', '') || 'home';
+
+        // Check if there are unsaved settings changes before navigating
+        if (hasUnsavedChanges) {
+            const confirmLeave = confirm("You have unsaved changes. Are you sure you want to leave?");
+            if (!confirmLeave) {
+                // Revert hash to the previous tab
+                isRevertingHash = true;
+                window.location.hash = currentTabId || 'settings';
+                return;
+            } else {
+                // Revert brand colors back to the saved state in localStorage
+                const saved = getSavedSettings();
+                previewBrandColor('primary', saved['primary-color']);
+                previewBrandColor('accent', saved['accent-color']);
+                hasUnsavedChanges = false;
+                initialSettings = null;
+            }
+        }
+
         const tab = APEX_CONFIG.tabs.find(t => t.id === hash) || APEX_CONFIG.tabs[0];
         
         if (tab) {
