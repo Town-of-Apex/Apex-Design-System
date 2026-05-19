@@ -12,7 +12,7 @@ If you are new to modern frontend development, here is a quick breakdown of the 
 
 - **React**: The UI library. Instead of writing raw HTML and manually updating it with `document.getElementById()`, React lets you build reusable UI "components" (like `<Button />`) that automatically update themselves when their underlying data changes.
 - **Vite**: The build tool and development server. It serves your code locally incredibly fast, providing "Hot Module Replacement" (HMR) — meaning when you save a file, the changes instantly appear in the browser without a full reload.
-- **TypeScript**: JavaScript with types. It prevents bugs by ensuring you don't pass the wrong kind of data to a function or component. For example, it ensures a `Permit` object always has an `address` property.
+- **TypeScript**: JavaScript with types. It prevents bugs by ensuring you don't pass the wrong kind of data to a function or component. For example, it ensures a `Permit` object always has a `project_address` property.
 - **Tailwind CSS**: A utility-first CSS framework. Instead of writing separate `.css` files, you apply styling directly in your components using standard class names (like `flex` or `mt-4`). We have configured it to perfectly match the Apex Modern design tokens.
 - **shadcn/ui**: A collection of highly accessible, unstyled UI primitives (built on Radix UI). We don't "install" shadcn as a dependency; instead, we copy its component code directly into `src/components/ui/` so we have total control over the styling and behavior.
 

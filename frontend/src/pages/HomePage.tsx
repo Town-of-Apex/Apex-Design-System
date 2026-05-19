@@ -43,6 +43,8 @@ const GETTING_STARTED_STEPS = [
         Create new <code>.tsx</code> files in <code>src/pages/</code> using the{" "}
         <code>PageContainer</code> and <code>PageHeader</code> components as your
         starting structure.
+        <br />
+        <a style={{ color: "var(--brand-primary)", textDecoration: "underline" }} href="https://www.google.com">google.com</a>
       </>
     ),
   },
@@ -56,8 +58,8 @@ export function HomePage() {
         {/* ── Page title ───────────────────────────────────────────── */}
         <PageHeader
           overline="Home"
-          title="The Peepee Poopoo Application System"
-          subtitle="A professional, traditionalist-modern design system built for clarity, hierarchy, and professional rigor. Strictly left-aligned, logically layered, and purposefully constrained."
+          title="Town of Apex Template App"
+          subtitle="A ready-to-use starting point for building a professional web application using the Town of Apex Design System."
         />
 
         <Divider />

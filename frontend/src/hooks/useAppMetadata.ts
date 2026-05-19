@@ -30,7 +30,7 @@ export function useAppMetadata() {
         // If the file is missing, use a safe fallback so the app still renders
         setMetadata({
           title:       "Apex Application",
-          version:     "0.0.0",
+          version:     "0.8.0",
           author:      "Apex IT",
           year:        new Date().getFullYear().toString(),
           status:      "Active",

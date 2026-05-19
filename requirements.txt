@@ -1,6 +1,4 @@
 fastapi
-uvicorn[standard]
-jinja2
+uvicorn
 sqlalchemy
 pydantic[email]
-pydantic-settings
