@@ -42,4 +42,10 @@ export const NAV_ITEMS: NavItem[] = [
     path:   "/settings",
     hidden: true, // Accessible via the settings dropdown, not the nav bar
   },
+  {
+    id:     "profile",
+    label:  "User Profile",
+    path:   "/profile",
+    hidden: true,
+  },
 ]

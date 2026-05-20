@@ -84,3 +84,16 @@ To add a new entity to this project (e.g., a "Vehicle Logs" feature), follow thi
 *   **Backend**: Python 3.13, FastAPI, SQLAlchemy 2.0 (SQLite database locally)
 *   **Reverse Proxy**: Traefik (routes `/api` to Python and all other traffic to React)
 *   **Containerization**: Docker & Docker Compose
+
+---
+
+## To-Dos
+* **Adjust for Dev and Production Workflows**: Separate paths for using the app in the development process (using npm run dev) and in a deployment environment (npm run build + docker)
+* **Authentication**: Build a standardized, out-of-the-box tool for authenticating applications using Microsoft AD for staff user verification. Preferably to include basic role-based permissions on a per-app basis as well. 
+* **PostgreSQL Migration**: Convert the default template database to postgreSQL connections, assuming a master Postgres database on the host machine.
+
+## Fixes and Tweaks
+* Non-theme settings don't persist (may want a useSettings script instead of just useTheme)
+* Buttons' hover state doesn't change based on the theme being used (primary color should be modified to set the hover color or something like that) (probably need whole palette for each theme)
+* Include links to documentation or custom-made pages for each of the core technologies listed in the tech stack
+* Write up a detailed guide document for how to take the template app and build out a new application inside it (going through dev-mode testing, processes, checks, deployment configuration, and launch)

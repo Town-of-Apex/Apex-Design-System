@@ -5,6 +5,7 @@ import { PermitsPage } from "@/pages/PermitsPage"
 import { ComponentsPage } from "@/pages/ComponentsPage"
 import { ColorsPage } from "@/pages/ColorsPage"
 import { SettingsPage } from "@/pages/SettingsPage"
+import { UserProfilePage } from "@/pages/UserProfilePage"
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/components" element={<ComponentsPage />} />
           <Route path="/colors" element={<ColorsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/profile" element={<UserProfilePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

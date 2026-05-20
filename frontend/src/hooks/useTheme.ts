@@ -15,17 +15,21 @@
 import { useState, useEffect } from "react"
 import type { Theme } from "@/types/app"
 
-const STORAGE_KEY = "apex-theme"
+export type ColorSystem = "default" | "ocean" | "sunset" | "forest"
+
+const THEME_STORAGE_KEY = "apex-theme"
+const COLOR_STORAGE_KEY = "apex-color-system"
 
 function getInitialTheme(): Theme {
-  // Check localStorage first
-  const stored = localStorage.getItem(STORAGE_KEY)
+  const stored = localStorage.getItem(THEME_STORAGE_KEY)
   if (stored === "dark" || stored === "light") return stored
-
-  // Fall back to the user's OS preference
   if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark"
-
   return "light"
+}
+
+function getInitialColorSystem(): ColorSystem {
+  const stored = localStorage.getItem(COLOR_STORAGE_KEY) as ColorSystem | null
+  return stored || "default"
 }
 
 function applyTheme(theme: Theme) {
@@ -36,18 +40,27 @@ function applyTheme(theme: Theme) {
   }
 }
 
+function applyColorSystem(color: ColorSystem) {
+  document.documentElement.setAttribute("data-color-system", color)
+}
+
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme)
+  const [colorSystem, setColorSystem] = useState<ColorSystem>(getInitialColorSystem)
 
-  // Apply the theme to <html> whenever it changes
   useEffect(() => {
     applyTheme(theme)
-    localStorage.setItem(STORAGE_KEY, theme)
+    localStorage.setItem(THEME_STORAGE_KEY, theme)
   }, [theme])
+
+  useEffect(() => {
+    applyColorSystem(colorSystem)
+    localStorage.setItem(COLOR_STORAGE_KEY, colorSystem)
+  }, [colorSystem])
 
   function toggleTheme() {
     setTheme((prev) => (prev === "light" ? "dark" : "light"))
   }
 
-  return { theme, toggleTheme }
+  return { theme, toggleTheme, colorSystem, setColorSystem }
 }

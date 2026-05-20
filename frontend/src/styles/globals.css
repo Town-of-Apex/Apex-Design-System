@@ -129,3 +129,34 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
+/* ─── COLOR SYSTEMS ──────────────────────────────────────────────────────── */
+
+/* Default is Forest Green and Sunflower Gold, defined in :root */
+
+[data-color-system="ocean"] {
+  --brand-primary:      var(--town-baltic-blue);
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  --brand-accent:       var(--town-cinnabar);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 12%, transparent);
+}
+
+[data-color-system="sunset"] {
+  --brand-primary:      var(--town-cinnabar);
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  --brand-accent:       var(--town-sunflower-gold);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 12%, transparent);
+}
+
+[data-color-system="forest"] {
+  --brand-primary:      var(--town-hunter-green);
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  --brand-accent:       var(--town-grey-olive);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 12%, transparent);
+}
+
+/* Update dark mode variables for color systems if needed (soft opacity) */
+[data-theme="dark"][data-color-system] {
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 15%, transparent);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 15%, transparent);
+}

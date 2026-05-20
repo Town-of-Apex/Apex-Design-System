@@ -172,10 +172,11 @@ export function AppHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* User profile button (placeholder for future auth) */}
+          {/* User profile button */}
           <Button
             variant="ghost"
             size="icon"
+            onClick={() => navigate("/profile")}
             aria-label="User profile"
             style={{
               width:        "32px",

@@ -14,8 +14,11 @@ import { Select } from "@/components/ui/Select"
 import { Button } from "@/components/ui/Button"
 import { toast } from "sonner"
 import { useState } from "react"
+import { useTheme, type ColorSystem } from "@/hooks/useTheme"
 
 export function SettingsPage() {
+  const { colorSystem, setColorSystem } = useTheme()
+
   const [settings, setSettings] = useState({
     primaryColor: "forest-green",
     accentColor: "sunflower-gold",
@@ -53,45 +56,20 @@ export function SettingsPage() {
               <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-4)" }}>
                   <div>
-                    <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>Primary App Color</p>
+                    <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>Color Theme System</p>
                     <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", margin: "var(--space-1) 0 0" }}>
-                      Main brand color for the application.
+                      Select the overall brand color scheme for the application.
                     </p>
                   </div>
                   <Select
-                    value={settings.primaryColor}
-                    onChange={(e) => setSettings({ ...settings, primaryColor: e.target.value })}
+                    value={colorSystem}
+                    onChange={(e) => setColorSystem(e.target.value as ColorSystem)}
                     style={{ width: "200px" }}
                   >
-                    <option value="forest-green">Forest Green</option>
-                    <option value="hunter-green">Hunter Green</option>
-                    <option value="baltic-blue">Baltic Blue</option>
-                    <option value="sunflower-gold">Sunflower Gold</option>
-                    <option value="cinnabar">Cinnabar</option>
-                    <option value="grey-olive">Grey Olive</option>
-                  </Select>
-                </div>
-
-                <Divider />
-
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-4)" }}>
-                  <div>
-                    <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>Accent Color</p>
-                    <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", margin: "var(--space-1) 0 0" }}>
-                      Color used for highlights and warnings.
-                    </p>
-                  </div>
-                  <Select
-                    value={settings.accentColor}
-                    onChange={(e) => setSettings({ ...settings, accentColor: e.target.value })}
-                    style={{ width: "200px" }}
-                  >
-                    <option value="sunflower-gold">Sunflower Gold</option>
-                    <option value="forest-green">Forest Green</option>
-                    <option value="hunter-green">Hunter Green</option>
-                    <option value="baltic-blue">Baltic Blue</option>
-                    <option value="cinnabar">Cinnabar</option>
-                    <option value="grey-olive">Grey Olive</option>
+                    <option value="default">Default (Forest & Gold)</option>
+                    <option value="ocean">Ocean (Baltic & Cinnabar)</option>
+                    <option value="sunset">Sunset (Cinnabar & Gold)</option>
+                    <option value="forest">Deep Forest (Hunter & Olive)</option>
                   </Select>
                 </div>
               </div>
