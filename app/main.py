@@ -16,6 +16,8 @@ from app.core.config import settings
 from app.core.database import init_db
 from app.core.exceptions import AppException, app_exception_handler, http_exception_handler
 from app.api.routes import permits as permit_router
+from app.api.routes import users as user_router
+from app.api.routes import db_status as db_status_router
 
 # ---------------------------------------------------------------------------
 # App instance
@@ -42,6 +44,8 @@ def on_startup():
 # API Routers
 # ---------------------------------------------------------------------------
 app.include_router(permit_router.router)
+app.include_router(user_router.router)
+app.include_router(db_status_router.router)
 
 # ---------------------------------------------------------------------------
 # Utility routes

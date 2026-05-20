@@ -81,19 +81,35 @@ To add a new entity to this project (e.g., a "Vehicle Logs" feature), follow thi
 
 ## 📋 Technical Stack
 *   **Frontend**: React 19, TypeScript, Vite 8, Tailwind CSS, Lucide icons, Sonner toasts
-*   **Backend**: Python 3.13, FastAPI, SQLAlchemy 2.0 (SQLite database locally)
+*   **Backend**: Python 3.13, FastAPI, SQLAlchemy 2.0 (Primary: PostgreSQL 15, Fallback: SQLite 3)
 *   **Reverse Proxy**: Traefik (routes `/api` to Python and all other traffic to React)
 *   **Containerization**: Docker & Docker Compose
+
+---
+
+## 🗄️ Database Connection & Fallback Architecture
+
+The template app is configured to use **PostgreSQL** as its primary database system. To facilitate rapid, zero-config local prototyping, it implements an **automatic fallback mechanism to SQLite**.
+
+### Configuration variables (`.env` or docker environment)
+- `DATABASE_URL`: Connection string for PostgreSQL (e.g. `postgresql+psycopg2://postgres:postgres@localhost:5432/apex_db`).
+- `ALLOW_SQLITE_FALLBACK`: Set to `True` (default) to fallback to a local SQLite file if the PostgreSQL database is unreachable.
+- `FALLBACK_DATABASE_URL`: Location of the fallback database (default `sqlite:///./data/app.db`).
+
+If the primary PostgreSQL server is down or unreachable, the system will log a warning and automatically configure itself to run using local SQLite storage, making the warning visible in the frontend Settings page.
 
 ---
 
 ## To-Dos
 * **Adjust for Dev and Production Workflows**: Separate paths for using the app in the development process (using npm run dev) and in a deployment environment (npm run build + docker)
 * **Authentication**: Build a standardized, out-of-the-box tool for authenticating applications using Microsoft AD for staff user verification. Preferably to include basic role-based permissions on a per-app basis as well. 
-* **PostgreSQL Migration**: Convert the default template database to postgreSQL connections, assuming a master Postgres database on the host machine.
+
+## Completed
+* [x] **PostgreSQL Migration**: Convert the default template database to PostgreSQL connection structures and containerize a database instance. Implemented robust SQLite automatic fallback behavior with visual warning alerts.
 
 ## Fixes and Tweaks
 * Non-theme settings don't persist (may want a useSettings script instead of just useTheme)
 * Buttons' hover state doesn't change based on the theme being used (primary color should be modified to set the hover color or something like that) (probably need whole palette for each theme)
 * Include links to documentation or custom-made pages for each of the core technologies listed in the tech stack
 * Write up a detailed guide document for how to take the template app and build out a new application inside it (going through dev-mode testing, processes, checks, deployment configuration, and launch)
+* Review CSS files and figure out how to consolidate or simplify (do we need both App.css and index.css? How do we add color themes? Do we need a full palette or can the shades be calculated?)

@@ -3,3 +3,5 @@ uvicorn
 sqlalchemy
 pydantic
 pydantic-settings
+# Approved driver for PostgreSQL connectivity
+psycopg2-binary==2.9.9
