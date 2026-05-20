@@ -103,6 +103,7 @@ If the primary PostgreSQL server is down or unreachable, the system will log a w
 ## To-Dos
 * **Adjust for Dev and Production Workflows**: Separate paths for using the app in the development process (using npm run dev) and in a deployment environment (npm run build + docker)
 * **Authentication**: Build a standardized, out-of-the-box tool for authenticating applications using Microsoft AD for staff user verification. Preferably to include basic role-based permissions on a per-app basis as well. 
+* **Sidebar**: Add a collapsible sidebar in addition to the header for additional navigation and customization space. 
 
 ## Completed
 * [x] **PostgreSQL Migration**: Convert the default template database to PostgreSQL connection structures and containerize a database instance. Implemented robust SQLite automatic fallback behavior with visual warning alerts.
