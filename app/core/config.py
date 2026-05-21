@@ -11,8 +11,10 @@ class Settings(BaseSettings):
     BASE_PATH: str = ""
     
     # Database
-    # Default to local SQLite if DATABASE_URL not set
-    DATABASE_URL: str = "sqlite:///./data/app.db"
+    # Primary: PostgreSQL. Fallback: SQLite
+    DATABASE_URL: str = "postgresql+psycopg2://postgres:postgres@localhost:5432/apex_db"
+    FALLBACK_DATABASE_URL: str = "sqlite:///./data/app.db"
+    ALLOW_SQLITE_FALLBACK: bool = True
     
     # Server
     PORT: int = 8080
@@ -23,8 +25,9 @@ class Settings(BaseSettings):
 # Global settings instance
 settings = Settings()
 
-# Export common variables for backward compatibility if needed, 
-# though components should ideally use `settings.VARIABLE`
+# Export common variables for backward compatibility if needed
 BASE_PATH = settings.BASE_PATH.rstrip("/")
 DATABASE_URL = settings.DATABASE_URL
 PORT = settings.PORT
+ALLOW_SQLITE_FALLBACK = settings.ALLOW_SQLITE_FALLBACK
+FALLBACK_DATABASE_URL = settings.FALLBACK_DATABASE_URL

@@ -1,6 +1,7 @@
 fastapi
-uvicorn[standard]
-jinja2
+uvicorn
 sqlalchemy
-pydantic[email]
+pydantic
 pydantic-settings
+# Approved driver for PostgreSQL connectivity
+psycopg2-binary==2.9.9

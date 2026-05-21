@@ -1,0 +1,162 @@
+/*
+  APEX MODERN — GLOBAL STYLES
+  Imported once in main.tsx. Defines design tokens and base resets.
+  Tailwind's utility classes reference these CSS variables through tailwind.config.js.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── DESIGN TOKENS: LIGHT MODE ──────────────────────────────────────────── */
+:root {
+  /* Typography stacks */
+  --font-display: 'DM Serif Display', serif;
+  --font-ui:      'Montserrat', sans-serif;
+  --font-body:    'Inter', sans-serif;
+
+  /* Layered surfaces */
+  --bg-canvas:  #f5f5f5;  /* L0: root background */
+  --bg-surface: #ffffff;  /* L1: cards, panels */
+  --bg-inner:   #ededed;  /* L2: inputs, recessed areas */
+
+  /* Official Town brand palette */
+  --town-grey-olive:     #968c83;
+  --town-dim-grey:       #796e65;
+  --town-forest-green:   #3f873f;
+  --town-hunter-green:   #40683c;
+  --town-cinnabar:       #d75742;
+  --town-baltic-blue:    #00586f;
+  --town-sunflower-gold: #f3bd48;
+
+  /* Brand */
+  --brand-primary:      var(--town-forest-green);
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  --brand-accent:       var(--town-sunflower-gold);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 12%, transparent);
+
+  /* Semantic state colors */
+  --color-success: var(--town-forest-green);
+  --color-warning: var(--town-sunflower-gold);
+  --color-error:   var(--town-cinnabar);
+  --color-info:    var(--town-baltic-blue);
+
+  /* Text & borders */
+  --text-main:     #1a1a1a;
+  --text-muted:    var(--town-dim-grey);
+  --border-subtle: #f9f3ec;
+  --border-strong: var(--town-grey-olive);
+
+  /* Spacing scale */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-7:  1.75rem;
+  --space-8:  2rem;
+  --space-9:  2.5rem;
+  --space-10: 3rem;
+  --space-11: 4rem;
+  --space-12: 5rem;
+
+  /* Motion */
+  --duration-fast:   100ms;
+  --duration-medium: 200ms;
+  --ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Geometry */
+  --radius-btn:   6px;
+  --radius-card:  12px;
+  --radius-modal: 16px;
+  --logo-size:    32px;
+
+  /* Layout */
+  --container-width: 1152px;
+  --header-height:   72px;
+  --sidebar-width:   250px;
+}
+
+/* ─── DESIGN TOKENS: DARK MODE ───────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg-canvas:  #202529;
+  --bg-surface: #171a1d;
+  --bg-inner:   #272a2e;
+
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 15%, transparent);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 15%, transparent);
+
+  --text-main:     #f1f5f9;
+  --text-muted:    #94a3b8;
+  --border-subtle: #2d3339;
+  --border-strong: #475569;
+
+  --town-grey-olive: #a8a29e;
+  --town-dim-grey:   #94a3b8;
+}
+
+/* ─── BASE RESET ─────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  /* Ensures the data-theme attribute works at the document level */
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body), 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+  transition:
+    background-color var(--duration-medium) var(--ease-standard),
+    color            var(--duration-medium) var(--ease-standard);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ─── COLOR SYSTEMS ──────────────────────────────────────────────────────── */
+
+/* Default is Forest Green and Sunflower Gold, defined in :root */
+
+[data-color-system="ocean"] {
+  --brand-primary:      var(--town-baltic-blue);
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  --brand-accent:       var(--town-cinnabar);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 12%, transparent);
+}
+
+[data-color-system="sunset"] {
+  --brand-primary:      var(--town-cinnabar);
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  --brand-accent:       var(--town-sunflower-gold);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 12%, transparent);
+}
+
+[data-color-system="forest"] {
+  --brand-primary:      var(--town-hunter-green);
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  --brand-accent:       var(--town-grey-olive);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 12%, transparent);
+}
+
+/* Update dark mode variables for color systems if needed (soft opacity) */
+[data-theme="dark"][data-color-system] {
+  --brand-primary-soft: color-mix(in srgb, var(--brand-primary) 15%, transparent);
+  --brand-accent-soft:  color-mix(in srgb, var(--brand-accent) 15%, transparent);
+}
