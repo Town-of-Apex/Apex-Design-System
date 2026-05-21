@@ -8,6 +8,18 @@ wheels/
 .venv
 .python-version
 
+# Node dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # Environment / Secrets
 .env
 .env.local
