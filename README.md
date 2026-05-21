@@ -1,120 +1,116 @@
 # 🛡️ Apex Application Template
 
-The **Apex Application Template** is the standardized starting point for all web application development within our team. It provides a pre-configured, visually consistent "App Shell" that adheres to the **Apex Design System (v2.0)** and handles the complexities of sub-path routing and containerized deployment out-of-the-box.
+The **Apex Application Template** is the standardized starting point for all web application development within the Town of Apex. 
+
+This repository has been fully migrated to a modern **React + Vite + TypeScript** frontend architecture, utilizing a decoupled **FastAPI** backend serving as a clean REST API layer. The legacy server-rendered Jinja2 templates, static folders, and custom JavaScript routing engine (`pages/` and `static/`) have been completely retired.
 
 ---
 
 ## 🏗️ Architecture Overview
 
-### 1. Project Metadata (`app_metadata.json`)
-The source of truth for project-wide information.
-- **Fields:** `title`, `version`, `author`, `logo`, and `favicon`.
-- **Usage:** Dynamically loaded by the frontend at runtime.
+The system is split into two independent services operating over a shared API data contract:
 
-### 2. UI Configuration (`static/apex-config.js`)
-Handles the visual structure of the app shell.
-- **Usage:** Define your navigation `tabs` here. Use paths relative to the base (e.g., `pages/home.html`).
+```mermaid
+graph TD
+    Browser[Web Browser] -->|Routes /api & /app_metadata.json| Backend[FastAPI Backend :8080]
+    Browser -->|Routes /*| Frontend[Vite/React Frontend :5173]
+    Frontend -->|Typed Requests| Backend
+    Backend -->|SQLAlchemy| DB[(SQLite Database)]
+```
 
-### 3. Application Shell (`pages/core.html` & `app/main.py`)
-- **Backend:** A FastAPI server that handles `BASE_PATH` injection and serves static files.
-- **Frontend:** A Jinja2-powered HTML shell that uses a `<base>` tag for seamless sub-path routing.
+### 1. Frontend Architecture (`/frontend/src/`)
+Located in the `frontend` folder, built on **React 19**, **Vite**, **TypeScript**, and **Tailwind CSS**.
+*   **Routing (`App.tsx` & `AppShell.tsx`)**: Configured via React Router. The `AppShell` component establishes the common header, sidebar navigation, and footer layout globally.
+*   **Branding & Metadata (`useAppMetadata.ts`)**: Instead of hardcoding text or manipulating the DOM with custom scripts, the application consumes `app_metadata.json` dynamically at runtime using the `useAppMetadata` hook. This updates the document tab title and populates footer versions and copyright details automatically.
+*   **Service Layer (`services/` & `types/`)**: Centralized HTTP client methods (e.g. `permitService.ts`) manage communication with the backend. **No raw fetch calls** are written inside individual UI pages or components.
+*   **Styling (`styles/globals.css`)**: Implements the official Town of Apex Design System v2.0 design tokens (color-mix state palettes, layered canvas surfaces, font styling, and standard spacing scales) combined with Tailwind CSS.
 
----
-
-## 🛠️ Local Development
-
-For the best experience, use Docker with the provided override file.
-
-1. **Clone the Repo.**
-2. **Create the Internal Network** (if it doesn't exist):
-   ```powershell
-   docker network create apex-internal
-   ```
-3. **Start the Dev Server:**
-   ```powershell
-   docker compose up --build
-   ```
-   *Note: This uses `docker-compose.override.yml` to volume-mount your code, meaning changes you make to HTML/JS reflect instantly without a rebuild.*
-4. **Access the App:**
-   - **Default:** `http://localhost:8080/demo/`
-   - **IMPORTANT:** Always include the trailing slash when testing sub-paths locally.
+### 2. Backend Architecture (`/app/`)
+A lean Python/FastAPI service serving as the single source of truth for data and metadata.
+*   **Database Foundation**: Abstracted using SQLAlchemy 2.0. All models inherit from a common `Base` database model class that auto-adds tracking and keys. New models placed under `app/models/` are auto-discovered on startup by `init_db()`.
+*   **Business Logic (Services)**: The service layer (`app/services/`) inherits from a generic `BaseService` template to provide standard CRUD, pagination, and text-based searches out-of-the-box.
+*   **Clean API Registration**: Legacy Jinja2 mounts, template setups, and static page serving have been removed. The backend only registers the resource routers (e.g., `app/api/routes/permits.py`) and serves the global `/app_metadata.json` file.
 
 ---
 
-## 🚀 Deployment (VM + Traefik)
+## 🛠️ Local Development Workflow
 
-To deploy on a VM behind an Apex Traefik router:
+The development environment is containerized using Docker and Orchestrated with Docker Compose.
 
-1. **Update the Base Path:**
-   If you want to move the app from `/demo` to `/my-app`:
-   - **`docker-compose.yml`**: Update the `BASE_PATH` environment variable and the Traefik `PathPrefix` labels.
-   - **`.env`**: Update your `BASE_PATH` variable.
-2. **Launch in Production Mode:**
-   ```bash
-   docker compose -f docker-compose.yml up -d --build
-   ```
-   *Note: This "bakes" the code into the image for immutability.*
+### Running with Docker (Recommended)
+1.  **Create the Internal Network** (if not already present):
+    ```bash
+    docker network create apex-internal
+    ```
+2.  **Start the Dev Containers**:
+    ```bash
+    docker compose up --build
+    ```
+    *Note: This mounts local directories via `docker-compose.override.yml`, meaning backend changes reload Uvicorn, and frontend changes trigger Vite's Hot Module Replacement (HMR) instantly in the browser.*
+3.  **Access the Application**:
+    *   Open `http://localhost:5173/` in your browser.
+    *   Vite proxies `/api/*` and `/app_metadata.json` requests directly to the backend service container at port `8080`.
+
+### Running Frontend Locally (Outside Docker)
+If you prefer running the frontend server locally on your host machine (e.g., for direct npm debugging):
+1.  Navigate to the directory: `cd frontend`
+2.  Install packages: `npm install`
+3.  Start the local dev server: `npm run dev`
+    *Note: The `vite.config.ts` dynamically detects whether it is running inside a container or on the host machine. If on the host, the dev server automatically redirects API proxies to `http://localhost:8080` instead of `http://apex-backend:8080`.*
 
 ---
 
-## 🎨 Branding & Customization
+## 🚀 Adding New Features & Resources
 
-To update the application's look and feel:
-1. **Logo & Favicon:** Replace the files in `static/` and update the paths in `app_metadata.json`.
-2. **Navigation:** Add or remove objects in the `tabs` array in `static/apex-config.js`.
-3. **Content:** Create or edit HTML snippets in the `pages/` directory.
+To add a new entity to this project (e.g., a "Vehicle Logs" feature), follow this flow:
 
----
+### Step 1: Backend Setup
+1.  **Model**: Create a SQLAlchemy model in `app/models/vehicle_log.py` inheriting from `Base`.
+2.  **Schema**: Create Pydantic schemas in `app/schemas/vehicle_log.py` (e.g., `VehicleLogCreate`, `VehicleLogUpdate`, `VehicleLogRead`).
+3.  **Service**: Create `app/services/vehicle_log_service.py` extending `BaseService`.
+4.  **Route**: Create a router in `app/api/routes/vehicle_logs.py` and register it inside `app/main.py`.
 
----
-
-## 🖥️ Backend System (FastAPI + SQLAlchemy)
-
-This template uses a highly abstracted, "Standardized CRUD" architecture to minimize boilerplate and ensure consistency across Apex tools.
-
-### 1. Database Foundation
-- **Base Model**: All models inherit from `app.core.database.Base`, which automatically adds `id`, `created_at`, and `updated_at` fields and generates a `__tablename__` based on the class name.
-- **Auto-Discovery**: New models placed in `app/models/` are automatically discovered and created on startup by `init_db()`.
-
-### 2. Generic CRUD Service
-We use a `BaseService` pattern to handle 90% of standard database logic.
-- **Location:** `app/services/base_service.py`
-- **Capabilities:** Standard `get`, `list`, `create`, `update`, and `delete` with built-in search and filtering.
-
-### 3. Adding a New Resource (Entity)
-To add a new feature (e.g., "Inspections"):
-1. **Model:** Create `app/models/inspection.py` (inherit from `Base`).
-2. **Schema:** Create `app/schemas/inspection.py` (Define `Create`, `Update`, and `Read` shapes).
-3. **Service:** Create `app/services/inspection_service.py` and instantiate a `BaseService`.
-4. **Route:** Create `app/api/routes/inspections.py` and register it in `app/main.py`.
-
-### 4. Consistent Responses & Error Handling
-- **Success:** Wrap returns in `ok(data)` from `app.core.responses`.
-- **Errors:** Raise `AppException("Message", status_code=400)` from `app.core.exceptions`. These are automatically formatted into a standard JSON envelope by a global exception handler.
+### Step 2: Frontend Setup
+1.  **Types**: Create TypeScript interface files in `frontend/src/types/vehicleLog.ts` defining data shapes that match your Pydantic schemas.
+2.  **Service**: Create `frontend/src/services/vehicleLogService.ts` utilizing the shared client `get`/`post`/`put`/`del` functions from `api.ts`.
+3.  **Page**: Create your page component (e.g., `VehicleLogsPage.tsx`) in `frontend/src/pages/` utilizing your UI layout elements.
+4.  **Route**: Add a route map pointing to your new page in `frontend/src/App.tsx`.
+5.  **Navigation**: Register the new page inside `frontend/src/lib/navigation.ts` to automatically display it in the navigation header.
 
 ---
 
 ## 📋 Technical Stack
-- **Backend:** Python 3.13 / FastAPI (Standardized on port `8080`)
-- **Database:** SQLAlchemy 2.0 (SQLite by default, Postgres ready)
-- **Validation:** Pydantic v2 / Pydantic-Settings
-- **Templates:** Jinja2
-- **Styling:** Apex Modern CSS (Vanilla)
-- **Deployment:** Docker / Docker Compose / Traefik
+*   **Frontend**: React 19, TypeScript, Vite 8, Tailwind CSS, Lucide icons, Sonner toasts
+*   **Backend**: Python 3.13, FastAPI, SQLAlchemy 2.0 (Primary: PostgreSQL 15, Fallback: SQLite 3)
+*   **Reverse Proxy**: Traefik (routes `/api` to Python and all other traffic to React)
+*   **Containerization**: Docker & Docker Compose
 
-## AI Agent Skills
-- apex-app-architecture (v1 complete)
-- apex-code-review (v1 complete)
-- apex-modern-ui-design (v1 complete)
-- apex-debug-and-fix (not complete)
-- apex-dependencies (not complete)
-- apex-pre-deploy (not complete)
-- apex-security (not complete)
-- apex-template-skill (v1 complete)
+---
 
-## To-Dos for this Project
-- Add user authentication placeholder and profile system
-- Add notification system (maybe?)
-- Add Microsoft authentication stub for Azure AD integration
-- Add settings page placeholder
-- Add API starter file (maybe?)
+## 🗄️ Database Connection & Fallback Architecture
+
+The template app is configured to use **PostgreSQL** as its primary database system. To facilitate rapid, zero-config local prototyping, it implements an **automatic fallback mechanism to SQLite**.
+
+### Configuration variables (`.env` or docker environment)
+- `DATABASE_URL`: Connection string for PostgreSQL (e.g. `postgresql+psycopg2://postgres:postgres@localhost:5432/apex_db`).
+- `ALLOW_SQLITE_FALLBACK`: Set to `True` (default) to fallback to a local SQLite file if the PostgreSQL database is unreachable.
+- `FALLBACK_DATABASE_URL`: Location of the fallback database (default `sqlite:///./data/app.db`).
+
+If the primary PostgreSQL server is down or unreachable, the system will log a warning and automatically configure itself to run using local SQLite storage, making the warning visible in the frontend Settings page.
+
+---
+
+## To-Dos
+* **Adjust for Dev and Production Workflows**: Separate paths for using the app in the development process (using npm run dev) and in a deployment environment (npm run build + docker)
+* **Authentication**: Build a standardized, out-of-the-box tool for authenticating applications using Microsoft AD for staff user verification. Preferably to include basic role-based permissions on a per-app basis as well. 
+* **Sidebar**: Add a collapsible sidebar in addition to the header for additional navigation and customization space. 
+
+## Completed
+* [x] **PostgreSQL Migration**: Convert the default template database to PostgreSQL connection structures and containerize a database instance. Implemented robust SQLite automatic fallback behavior with visual warning alerts.
+
+## Fixes and Tweaks
+* Non-theme settings don't persist (may want a useSettings script instead of just useTheme)
+* Buttons' hover state doesn't change based on the theme being used (primary color should be modified to set the hover color or something like that) (probably need whole palette for each theme)
+* Include links to documentation or custom-made pages for each of the core technologies listed in the tech stack
+* Write up a detailed guide document for how to take the template app and build out a new application inside it (going through dev-mode testing, processes, checks, deployment configuration, and launch)
+* Review CSS files and figure out how to consolidate or simplify (do we need both App.css and index.css? How do we add color themes? Do we need a full palette or can the shades be calculated?)

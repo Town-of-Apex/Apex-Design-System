@@ -1,0 +1,16 @@
+.git
+.agents
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+
+# Ignore frontend node_modules and build artifacts
+frontend/node_modules/
+frontend/dist/
+frontend/.npm/
