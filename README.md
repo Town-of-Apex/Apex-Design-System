@@ -4,7 +4,7 @@ Short one-liner describing what this project does.
 
 ---
 
-## 🚀 Overview
+## Overview
 
 **What is this project?**  
 Brief description of the application, service, or tool.
@@ -17,7 +17,7 @@ Internal users, public users, admins, etc.
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 List the main technologies used:
 
@@ -29,7 +29,7 @@ List the main technologies used:
 
 ---
 
-## 📦 Features
+## Features
 
 - Feature 1
 - Feature 2
@@ -39,7 +39,7 @@ List the main technologies used:
 
 ---
 
-## 🖥️ Local Development Setup
+## Local Development Setup
 
 ### Prerequisites
 
