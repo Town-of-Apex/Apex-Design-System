@@ -5,7 +5,7 @@ services:
     environment:
       - BASE_PATH=
       - DEV_MODE=true
-      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@apex-db:5432/apex_db
+      - DATABASE_URL=postgresql+psycopg2://demo:password@apex-db:5432/apex_db
 
   apex-frontend:
     volumes:

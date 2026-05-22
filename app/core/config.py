@@ -12,7 +12,8 @@ class Settings(BaseSettings):
     
     # Database
     # Primary: PostgreSQL. Fallback: SQLite
-    DATABASE_URL: str = "postgresql+psycopg2://postgres:postgres@localhost:5432/apex_db"
+    # MAKE SURE THIS DATABASE URL IS UPDATED BEFORE PRODUCTION TO REFER JUST TO postgres_db INSTEAD OF LOCALHOST
+    DATABASE_URL: str = "postgresql+psycopg2://demo:password@localhost:5432/demo"
     FALLBACK_DATABASE_URL: str = "sqlite:///./data/app.db"
     ALLOW_SQLITE_FALLBACK: bool = True
     

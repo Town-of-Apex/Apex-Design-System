@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       - BASE_PATH=/demo
-      - DATABASE_URL=sqlite:///./data/app.db
+      - DATABASE_URL=postgresql://demo:password@postgres_db:5432/demo
     volumes:
       - apex-demo-data:/app/data
     networks:
@@ -37,24 +37,8 @@ services:
     ports:
       - "5173:5173"
 
-  apex-db:
-    container_name: apex-db
-    image: postgres:15-alpine
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=apex_db
-    volumes:
-      - apex-db-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - apex-internal
-
 volumes:
   apex-demo-data:
-  apex-db-data:
 
 networks:
   apex-internal:

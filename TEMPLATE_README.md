@@ -98,6 +98,16 @@ The template app is configured to use **PostgreSQL** as its primary database sys
 
 If the primary PostgreSQL server is down or unreachable, the system will log a warning and automatically configure itself to run using local SQLite storage, making the warning visible in the frontend Settings page.
 
+Database is managed in a central database container (postgres_db in Docker) that is accessible on the apex-internal network. Every new project will create a new database on that container, add tables to the new database as needed, and connect to existing shared databases/tables as needed. pgAdmin is used to visually manage the container and its databases
+* pgAdmin: ip_address:5050
+* CREATE DATABASE db_name;
+* CREATE ROLE db_user_name WITH PASSWORD 'password';
+* GRANT ALL PRIVILEGES ON DATABASE db_name TO db_user_name;
+* ALTER ROLE db_user_name WITH LOGIN;
+
+
+For each new application, create a separate database in this container, create a separate user, grant the user all privileges to the new database, and create tables within that database as needed. DO NOT automatically create databases or tables on app startup; that may cause duplicates to be created in the postgres container. 
+
 ---
 
 ## To-Dos
