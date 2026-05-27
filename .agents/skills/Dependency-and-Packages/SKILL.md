@@ -1,77 +1,58 @@
 ---
 name: apex-dependency-advisor
-description: Enforces a pragmatic, minimal-dependency approach to software development for the Town of Apex. Use this to evaluate package additions, favor standard libraries, and prevent dependency bloat.
+description: Governs dependency decisions for Apex template apps with a pragmatic policy centered on maintainability, security, and React/FastAPI consistency.
 ---
 
-# Apex Dependency & Package Management Standards
+# Apex Dependency and Package Management Standard
 
-This skill defines our standard policy on third-party packages and software dependencies. 
+Use this skill when evaluating, adding, upgrading, or removing dependencies in backend or frontend code.
 
-For a small municipal IT department like the Town of Apex, **every dependency introduced is future maintenance debt.** A larger dependency footprint means more security vulnerabilities to monitor, higher chances of deployment failure, and more complexity for our developers.
+## Dependency Principles
 
----
+1. Prefer existing stack capabilities before adding new packages.
+2. Keep runtime dependency count intentionally low.
+3. Choose mature, maintained libraries with clear value.
+4. Keep dependency usage consistent across template-derived apps.
 
-## 🔍 When to Use This Skill
+## Approved Baseline Stack
 
-Use this skill when:
--   **Implementing a New Feature**: Deciding whether to write a custom solution or import a library.
--   **Reviewing Code / PRs**: Auditing proposed changes to ensure no unauthorized or redundant packages have been introduced.
--   **Upgrading or Patching**: Reviewing existing dependencies for updates or security vulnerabilities.
+### Frontend
 
----
+- React + TypeScript + Vite.
+- Tailwind CSS.
+- Reusable UI component system following shadcn/ui patterns.
+- Router/state/tooling already present in template should be reused before new framework additions.
 
-## 🏗️ Core Dependency Principles
+### Backend
 
-1.  **Standard Library First**: Python and modern JavaScript have incredibly powerful standard libraries. Always attempt to solve a problem with standard tools first (e.g., standard `json`, `datetime`, `pathlib`, `urllib.request`, or standard JS `fetch`).
-2.  **The "10-Line Rule"**: If a task can be achieved using a few lines of clean, readable standard Python or JavaScript, write the code yourself. Do not install a library to do simple tasks like padding strings, parsing basic CSVs, or formatting dates.
-3.  **Reproducible & Pinned**: We never allow "floating" dependency versions in production. All dependencies must be strictly pinned to ensure that a deployment today behaves exactly like a deployment next year.
-4.  **No Redundancy**: Do not add multiple packages that do the same thing. For example, if we use `pydantic` for validation, do not introduce `marshmallow` or custom validators.
+- FastAPI + Uvicorn.
+- Pydantic / pydantic-settings.
+- SQLAlchemy.
+- Existing project HTTP/database tooling from `requirements.txt`.
 
----
+## Rules for Adding New Dependencies
 
-## 📦 Town of Apex Approved Stack
+Before adding any package:
 
-To keep our skills sharp and our applications consistent, all internal projects are standardized on this core set of vetted packages. Deviations require explicit approval from the IT Lead.
+1. Confirm no equivalent exists in current dependencies or standard library.
+2. Document why the dependency is needed in the PR/task summary.
+3. Validate maintenance health and security posture.
+4. Add only where needed (frontend vs backend) and avoid cross-layer bleed.
+5. Keep lockfiles and manifests in sync.
 
-### 🐍 Python (Backend)
--   **Web Server / API**: `fastapi` + `uvicorn[standard]`
--   **HTML Rendering**: `jinja2` (used to serve our standard `core.html` shell)
--   **Data Validation & Environment**: `pydantic` + `pydantic-settings`
--   **Database Access**: `sqlalchemy`
-    -   *Local / Lightweight Dev*: Standard `sqlite3` (built-in)
-    -   *Production / Server-based*: `psycopg2-binary` (for PostgreSQL connectivity)
--   **HTTP Client**: `httpx` (preferred over `requests` for native async compatibility)
--   **Date & Time Zones**: Standard `datetime` and `zoneinfo` (built-in to Python 3.9+; do not install `pytz` or `moment`)
+## Frontend-Specific Guidance
 
-### 🌐 JavaScript (Frontend)
--   **No Build Step / Vanilla JS**: We do not use React, Vue, or Angular for internal tools. Frontend logic is written in plain, accessible vanilla JavaScript.
--   **HTTP Calls**: Use the browser's standard `fetch()` API. Do not import `axios` or `jquery`.
+- Prefer extending `frontend/src/components/ui` and utility helpers over importing broad UI frameworks.
+- Avoid overlapping packages that duplicate current stack responsibilities (for example, multiple data-fetching libraries without clear need).
+- Prefer browser-native and existing app-service abstractions for API calls.
 
----
+## Backend-Specific Guidance
 
-## ⚙️ How to Add a Dependency (Vetting Process)
+- Prefer existing service and schema patterns over adding ORMs/validation frameworks that duplicate SQLAlchemy/Pydantic.
+- Keep production/runtime dependencies separate from developer tooling where possible.
 
-Before adding any package to `requirements.txt` or `package.json`, AI agents and developers must complete this checklist:
+## Anti-Patterns
 
-1.  **Exhaust Standard Options**: Prove that the task cannot be easily or cleanly done using standard libraries.
-2.  **Check Transitive Footprint**: Ensure the library does not pull in dozens of secondary dependencies (e.g., installing a simple utility should not install half of the internet).
-3.  **Security Check**: Verify the package is actively maintained and has no outstanding critical CVEs (Common Vulnerabilities and Exposures).
-4.  **Pin the Version**: Add the package using explicit pinning:
-    ```text
-    # In requirements.txt
-    httpx==0.27.0
-    ```
-5.  **Document the Justification**: Add a brief comment above the package in `requirements.txt` explaining *why* it is there:
-    ```text
-    # Used for non-blocking async HTTP calls to Apex GIS Server
-    httpx==0.27.0
-    ```
-
----
-
-## 🛑 What NOT to Do
-
--   ❌ **No Floating Versions**: Never add a bare package name like `fastapi` or `sqlalchemy` without `==x.y.z`.
--   ❌ **No Unapproved CSS/JS Frameworks**: Never add Tailwind, Bootstrap, React, or jQuery via CDN or npm unless explicitly requested. Rely strictly on `apex-modern.css`.
--   ❌ **No Dev Dependencies in Prod**: Keep runtime requirements separate from testing utilities (like `pytest` or `black`).
--   ❌ **No "Cool-Looking" Libraries**: Just because a package is trending on GitHub does not mean we need it. Prioritize boring, rock-solid, widely supported technologies.
+- Adding dependencies for trivial helpers.
+- Adding unmaintained or high-risk packages without approval.
+- Introducing alternative frameworks that conflict with React/Tailwind/shadcn or FastAPI architecture.
