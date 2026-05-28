@@ -25,6 +25,20 @@ import type { ApiResponse } from "@/types/api"
  */
 const BASE_PATH = import.meta.env.BASE_URL.replace(/\/$/, "")
 
+let authToken: string | null = null
+
+export function setAuthToken(token: string | null): void {
+  authToken = token
+}
+
+export function clearAuthToken(): void {
+  authToken = null
+}
+
+export function getAuthToken(): string | null {
+  return authToken
+}
+
 // ---------------------------------------------------------------------------
 // Core fetch wrapper
 // ---------------------------------------------------------------------------
@@ -38,11 +52,17 @@ async function request<T>(
   path: string,
   body?: unknown
 ): Promise<T> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  }
+
+  if (authToken) {
+    headers.Authorization = `Bearer ${authToken}`
+  }
+
   const options: RequestInit = {
     method,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
   }
 
   if (body !== undefined) {

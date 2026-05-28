@@ -1,11 +1,24 @@
+# Production — backend + frontend only (no local Postgres).
+# Connects to the shared PostgreSQL container (postgres_db) on apex-internal.
+#
+#   docker compose up -d --build
+#
+# Local development uses docker-compose.dev.yml instead.
+# Set POSTGRES_HOST=postgres_db and app credentials in .env before deploying.
+
 services:
   apex-backend:
     container_name: apex-backend
     build: .
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      - BASE_PATH=/demo
-      - DATABASE_URL=postgresql://demo:password@postgres_db:5432/demo
+      DEV_MODE: "false"
+      AUTO_CREATE_TABLES: "false"
+      RUN_MIGRATIONS: "true"
+      AUTO_MIGRATE_DEV: "false"
+      ALLOW_SQLITE_FALLBACK: "false"
     volumes:
       - apex-demo-data:/app/data
     networks:
@@ -23,11 +36,12 @@ services:
     container_name: apex-frontend
     build: ./frontend
     restart: unless-stopped
+    env_file:
+      - .env
     networks:
       - apex-internal
     environment:
-      - BASE_PATH=/demo
-      - CHOKIDAR_USEPOLLING=true
+      CHOKIDAR_USEPOLLING: "true"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.apex-frontend.rule=PathPrefix(`/demo`)"

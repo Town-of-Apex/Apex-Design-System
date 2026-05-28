@@ -21,13 +21,18 @@ import {
 } from "@/components/ui/DropdownMenu"
 import { useAppMetadata } from "@/hooks/useAppMetadata"
 import { useTheme } from "@/hooks/useTheme"
+import { useAuth } from "@/hooks/useAuth"
 import { NAV_ITEMS } from "@/lib/navigation"
+import { PERMISSIONS } from "@/types/auth"
 
 export function AppHeader() {
   const navigate = useNavigate()
   const location = useLocation()
   const { metadata } = useAppMetadata()
   const { theme, toggleTheme } = useTheme()
+  const { session, hasPermission, logout, authEnabled } = useAuth()
+
+  const canAccessSettings = hasPermission(PERMISSIONS.SETTINGS_ACCESS)
 
   return (
     <header
@@ -165,10 +170,20 @@ export function AppHeader() {
                 Toggle Theme
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={() => navigate("/settings")}>
-                <Settings className="w-4 h-4" />
-                App Settings
-              </DropdownMenuItem>
+              {canAccessSettings && (
+                <DropdownMenuItem onSelect={() => navigate("/settings")}>
+                  <Settings className="w-4 h-4" />
+                  App Settings
+                </DropdownMenuItem>
+              )}
+              {authEnabled && session && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onSelect={logout}>
+                    Sign Out ({session.user.username})
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
 

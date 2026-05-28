@@ -21,6 +21,10 @@ export interface DbStatus {
   tables?: string[];
   details?: DbDetails;
   meta_error?: string;
+  dev_mode?: boolean;
+  auto_create_tables?: boolean;
+  postgres_host?: string;
+  postgres_db?: string;
 }
 
 export interface User {
@@ -29,8 +33,10 @@ export interface User {
   full_name: string;
   email: string | null;
   role: string;
+  app_role?: string | null;
   department: string | null;
   is_active: boolean;
+  entra_oid?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -40,6 +46,6 @@ export interface UserFormData {
   full_name: string;
   password?: string;
   email?: string;
-  role?: string;
+  app_role?: "admin" | "user";
   department?: string;
 }

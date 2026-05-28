@@ -9,19 +9,29 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 import app.core.database as db_core
+from app.api.deps import CurrentUser, require_permission
+from app.core.config import settings
 from app.core.database import get_db, db_status_info
+from app.core.permissions import SETTINGS_ACCESS
 from app.core.responses import ok
 
 router = APIRouter(prefix="/api/db-status", tags=["db-status"])
 
 
 @router.get("")
-def get_db_status(db: Session = Depends(get_db)):
+def get_db_status(
+    db: Session = Depends(get_db),
+    _: CurrentUser = Depends(require_permission(SETTINGS_ACCESS)),
+):
     """
     Check the current database connection.
     Retrieves dialect-specific parameters, table list, and warnings.
     """
     status = db_status_info.copy()
+    status["dev_mode"] = settings.DEV_MODE
+    status["auto_create_tables"] = settings.AUTO_CREATE_TABLES
+    status["postgres_host"] = settings.POSTGRES_HOST
+    status["postgres_db"] = settings.POSTGRES_DB
 
     # Mask credentials in the displayed connection URL
     url_str = str(status["url"])

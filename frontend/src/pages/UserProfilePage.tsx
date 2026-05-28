@@ -1,10 +1,16 @@
+import { useNavigate } from "react-router-dom"
 import { PageContainer } from "@/components/layout/PageContainer"
 import { PageHeader } from "@/components/shared/PageHeader"
 import { Divider } from "@/components/shared/Divider"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
+import { Badge } from "@/components/ui/Badge"
+import { useAuth } from "@/hooks/useAuth"
 
 export function UserProfilePage() {
+  const navigate = useNavigate()
+  const { session, authEnabled, logout } = useAuth()
+
   return (
     <PageContainer>
       <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-8)" }}>
@@ -12,7 +18,7 @@ export function UserProfilePage() {
         <PageHeader
           overline="Account Information"
           title="User Profile"
-          subtitle="Manage your personal information and security settings."
+          subtitle="Your signed-in account and app role."
         />
 
         <Divider />
@@ -24,22 +30,39 @@ export function UserProfilePage() {
             </h3>
             
             <Card style={{ padding: "var(--space-6)" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-                <div>
-                  <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>Name</p>
-                  <p style={{ color: "var(--text-muted)", margin: "var(--space-1) 0 0" }}>Town Employee</p>
+              {session ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+                  <div>
+                    <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>Name</p>
+                    <p style={{ color: "var(--text-muted)", margin: "var(--space-1) 0 0" }}>{session.user.full_name}</p>
+                  </div>
+                  <Divider />
+                  <div>
+                    <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>Username</p>
+                    <p style={{ color: "var(--text-muted)", margin: "var(--space-1) 0 0" }}>{session.user.username}</p>
+                  </div>
+                  <Divider />
+                  <div>
+                    <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>Email</p>
+                    <p style={{ color: "var(--text-muted)", margin: "var(--space-1) 0 0" }}>{session.user.email ?? "—"}</p>
+                  </div>
+                  <Divider />
+                  <div>
+                    <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>App Role</p>
+                    <div style={{ marginTop: "var(--space-2)" }}>
+                      <Badge variant={session.role === "admin" ? "success" : "default"}>
+                        {session.role}
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
-                <Divider />
-                <div>
-                  <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>Email</p>
-                  <p style={{ color: "var(--text-muted)", margin: "var(--space-1) 0 0" }}>employee@apexnc.org</p>
-                </div>
-                <Divider />
-                <div>
-                  <p style={{ fontWeight: 600, color: "var(--text-main)", margin: 0 }}>Department</p>
-                  <p style={{ color: "var(--text-muted)", margin: "var(--space-1) 0 0" }}>Information Technology</p>
-                </div>
-              </div>
+              ) : (
+                <p style={{ color: "var(--text-muted)", margin: 0 }}>
+                  {authEnabled
+                    ? "You are not signed in."
+                    : "Authentication is disabled for this application."}
+                </p>
+              )}
             </Card>
           </section>
 
@@ -50,9 +73,18 @@ export function UserProfilePage() {
             
             <Card style={{ padding: "var(--space-6)" }}>
               <p style={{ color: "var(--text-muted)", marginBottom: "var(--space-4)" }}>
-                Active Directory authentication integration will be configured here.
+                Microsoft Entra SSO will replace dev-mode username/password login in production.
               </p>
-              <Button variant="secondary" disabled>Link AD Account</Button>
+              {authEnabled && !session && (
+                <Button variant="secondary" onClick={() => navigate("/login")}>
+                  Sign In
+                </Button>
+              )}
+              {authEnabled && session && (
+                <Button variant="secondary" onClick={logout}>
+                  Sign Out
+                </Button>
+              )}
             </Card>
           </section>
         </div>

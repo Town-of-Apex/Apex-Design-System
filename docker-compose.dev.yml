@@ -1,0 +1,82 @@
+# Local development — Postgres + optional full stack with hot reload.
+#
+# Postgres only (host-run backend via run_dev.ps1 / run_dev.sh):
+#   docker compose -f docker-compose.dev.yml up apex-dev-db -d --wait
+#
+# Full stack in Docker:
+#   docker compose -f docker-compose.dev.yml up --build
+
+services:
+  apex-dev-db:
+    image: postgres:16-alpine
+    container_name: apex-dev-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-demo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-demo}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - apex-dev-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $${POSTGRES_USER:-demo} -d $${POSTGRES_DB:-demo}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - dev
+
+  apex-backend:
+    container_name: apex-backend
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DEV_MODE: "true"
+      AUTO_CREATE_TABLES: "false"
+      RUN_MIGRATIONS: "true"
+      AUTO_MIGRATE_DEV: "true"
+      ALLOW_SQLITE_FALLBACK: "true"
+      BASE_PATH: ""
+      POSTGRES_HOST: apex-dev-db
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      apex-dev-db:
+        condition: service_healthy
+    networks:
+      - dev
+
+  apex-frontend:
+    container_name: apex-frontend
+    build: ./frontend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      BASE_PATH: ""
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    networks:
+      - dev
+
+networks:
+  dev:
+
+volumes:
+  apex-dev-db-data:

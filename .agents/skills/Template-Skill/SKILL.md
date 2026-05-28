@@ -33,7 +33,7 @@ New skills should explicitly account for:
 - Tailwind styling and shared UI primitives in `frontend/src/components/ui` (shadcn/ui style).
 - FastAPI backend layering in `app`.
 - Service-first data access patterns (`frontend/src/services` and `app/services`).
-- Shared configuration and metadata patterns (`.env.example`, `app_metadata.json`, `TEMPLATE_README.md`).
+- Shared configuration and metadata patterns (`.env.example`, `app_metadata.json`, `docs/template-guide.md`).
 
 ## Writing Style Guidance
 

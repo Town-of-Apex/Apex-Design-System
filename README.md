@@ -1,155 +1,53 @@
-# Project Name
+# Apex Design System (Template App)
 
-Short one-liner describing what this project does.
+Standardized starting point for Town of Apex web applications — **React + Vite + TypeScript** frontend, **FastAPI + PostgreSQL** backend.
 
----
+## Quick start
 
-## Overview
+```powershell
+# Copy environment config
+copy .env.example .env
 
-**What is this project?**  
-Brief description of the application, service, or tool.
-
-**Why does it exist?**  
-Explain the problem it solves or the value it provides.
-
-**Who is it for?**  
-Internal users, public users, admins, etc.
-
----
-
-## Tech Stack
-
-List the main technologies used:
-
-- Frontend:
-- Backend:
-- Database:
-- Infrastructure:
-- Other tools/libraries:
-
----
-
-## Features
-
-- Feature 1
-- Feature 2
-- Feature 3
-
-(Keep it high-level, not implementation details.)
-
----
-
-## Local Development Setup
-
-### Prerequisites
-
-- Node.js version:
-- Python version (if applicable):
-- Docker (if applicable):
-- Other dependencies:
-
----
-
-### Installation
-
-```bash
-# Clone the repo
-git clone <repo-url>
-
-# Navigate into project
-cd <project-folder>
-
-# Install dependencies
-<your install command here>
+# Start dev Postgres, backend, and frontend
+.\run_dev.ps1
 ```
 
-### Environment Variables
+Open http://localhost:5173 — sign in with **admin** / **admin123** to access admin features.
 
-Create a .env file in the root directory:
-```.env
-EXAMPLE_VAR=value
-EXAMPLE_API_KEY=your_key_here
+To wipe and recreate the local dev database (migrations + seed data):
 
-EXAMPLE_VAR: description
-EXAMPLE_API_KEY: description
+```powershell
+.\scripts\reset_dev_db.ps1
 ```
 
-### Running the Application
-Development (Windows)
-<./run_dev.ps1>
-Development (Mac)
-<./run_dev.sh>
-Production (if applicable)
-<docker compose up -d --build>
+## Documentation
 
+All project documentation lives in **[docs/](./docs/README.md)**:
 
-## Run linting
-<lint command>
+| Topic | Link |
+|-------|------|
+| Architecture & adding features | [docs/template-guide.md](./docs/template-guide.md) |
+| Frontend structure | [docs/frontend-guide.md](./docs/frontend-guide.md) |
+| Database connection (dev & production) | [docs/database-configuration.md](./docs/database-configuration.md) |
+| Alembic migrations | [docs/database-migrations.md](./docs/database-migrations.md) |
+| Authentication (dev + Entra roadmap) | [docs/authentication.md](./docs/authentication.md) |
+| Roles & permissions | [docs/app_user_permissions.md](./docs/app_user_permissions.md) |
+| UI design system | [docs/ui-design-summary.md](./docs/ui-design-summary.md) |
 
-## Project Structure
+## Project structure
+
+```text
 .
-├── frontend/
-├── backend/
-├── database/
-├── docker/
-└── README.md
+├── app/                  # FastAPI backend
+├── frontend/             # React frontend
+├── docs/                 # Documentation
+├── migrations/           # Alembic database migrations
+├── docker-compose.yml      # Production (backend + frontend)
+├── docker-compose.dev.yml  # Local dev (Postgres + optional full stack)
+├── run_dev.ps1           # Windows dev launcher
+└── .env.example          # Environment variable reference
+```
 
-Brief explanation of important directories:
+## Tech stack
 
-frontend/: ...
-backend/: ...
-database/: ...
-## API Overview (if applicable)
-Base URL
-/api
-Example Endpoint
-
-GET /example
-
-Response:
-
-{
-  "message": "hello world"
-}
-
-## Configuration
-
-Any important config notes:
-
-* How config is loaded
-* Where config lives
-* Feature flags (if any)
-
-## Deployment
-
-Describe how deployment works:
-
-* Where it’s hosted
-* CI/CD pipeline (if any)
-* Manual deployment steps (if any)
-
-## Security Notes
-* Authentication method:
-* Authorization model:
-* Any sensitive considerations:
-
-## Troubleshooting
-
-Common issues and fixes:
-
-Issue: <example problem>
-
-Fix: <solution>
-
-
-## License
-
-Specify license type or internal usage rules.
-
-## Maintainers
-Name / Team / Contact
-Escalation path for issues
-
-## Notes / Gotchas
-
-Anything weird or non-obvious about the system that future devs will thank you for.
+React 19 · TypeScript · Vite · Tailwind CSS · FastAPI · SQLAlchemy · PostgreSQL · Alembic · Docker

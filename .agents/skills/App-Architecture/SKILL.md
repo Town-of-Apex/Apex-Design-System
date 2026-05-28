@@ -38,8 +38,8 @@ All template-based apps should target this structure:
   - `src/styles/`: global design tokens and app-wide CSS.
 - `data/`: local runtime data (for example, SQLite fallback).
 - `.env.example`: documented environment variable placeholders.
-- `docker-compose.yml` and `docker-compose.override.yml`: containerized local/dev orchestration.
-- `TEMPLATE_README.md`: canonical onboarding and feature-extension guidance.
+- `docker-compose.yml` (production) and `docker-compose.dev.yml` (local dev): container orchestration.
+- `docs/template-guide.md`: canonical onboarding and feature-extension guidance.
 
 ## Frontend Standards (React + Tailwind + shadcn/ui)
 

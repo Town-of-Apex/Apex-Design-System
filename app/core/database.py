@@ -66,6 +66,13 @@ def get_db():
         db.close()
 
 
+def import_models():
+    """Import all ORM models so they register with Base.metadata."""
+    import app.models as models_pkg
+    for _, name, _ in pkgutil.iter_modules(models_pkg.__path__):
+        importlib.import_module(f"app.models.{name}")
+
+
 def init_db():
     """
     Create all tables defined in ORM models.
@@ -119,9 +126,23 @@ def init_db():
             # Re-raise error if fallback is not allowed or if SQLite itself failed
             raise e
 
-    # Automatically import all modules in app.models to register them with Base
-    import app.models as models_pkg
-    for _, name, _ in pkgutil.iter_modules(models_pkg.__path__):
-        importlib.import_module(f"app.models.{name}")
+    import_models()
 
-    Base.metadata.create_all(bind=engine)
+    if settings.RUN_MIGRATIONS:
+        from app.core.migrations import run_migrations
+        run_migrations()
+    elif settings.AUTO_CREATE_TABLES:
+        Base.metadata.create_all(bind=engine)
+        logger.info("Database tables ensured via create_all (AUTO_CREATE_TABLES=True)")
+    else:
+        logger.info(
+            "Skipping schema setup. Enable RUN_MIGRATIONS or AUTO_CREATE_TABLES."
+        )
+
+    if db_status_info["connected"]:
+        from app.services.rbac_service import rbac_service
+        from app.services.auth_service import auth_service
+
+        with SessionLocal() as db:
+            rbac_service.seed_roles_and_permissions(db)
+            auth_service.ensure_dev_admin(db)

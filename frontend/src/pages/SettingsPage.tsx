@@ -43,7 +43,7 @@ export function SettingsPage() {
     full_name: "",
     password: "",
     email: "",
-    role: "Employee",
+    role: "user",
     department: ""
   })
   const [submittingUser, setSubmittingUser] = useState(false)
@@ -87,7 +87,7 @@ export function SettingsPage() {
         full_name: newUser.full_name,
         password: newUser.password,
         email: newUser.email || undefined,
-        role: newUser.role,
+        app_role: newUser.role as "admin" | "user",
         department: newUser.department || undefined
       })
       toast.success("User created", { description: `Successfully created user ${newUser.username}` })
@@ -96,7 +96,7 @@ export function SettingsPage() {
         full_name: "",
         password: "",
         email: "",
-        role: "Employee",
+        role: "user",
         department: ""
       })
       // Refresh user list and DB metadata
@@ -360,8 +360,8 @@ export function SettingsPage() {
                               <td style={{ padding: "8px", fontWeight: 600 }}>{user.username}</td>
                               <td style={{ padding: "8px" }}>{user.full_name}</td>
                               <td style={{ padding: "8px" }}>
-                                <Badge variant={user.role === "Administrator" ? "success" : "default"}>
-                                  {user.role}
+                                <Badge variant={user.app_role === "admin" ? "success" : "default"}>
+                                  {user.app_role ?? user.role}
                                 </Badge>
                               </td>
                               <td style={{ padding: "8px" }}>{user.department || "—"}</td>
@@ -436,8 +436,8 @@ export function SettingsPage() {
                           value={newUser.role} 
                           onChange={(e) => setNewUser({...newUser, role: e.target.value})}
                         >
-                          <option value="Employee">Employee</option>
-                          <option value="Administrator">Administrator</option>
+                          <option value="user">User</option>
+                          <option value="admin">Admin</option>
                           <option value="Citizen">Citizen</option>
                         </Select>
                       </div>

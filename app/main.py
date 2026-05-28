@@ -6,7 +6,7 @@ FastAPI application factory.
 Responsibilities:
   1. Mount static files and pages (AAS-1.0 standard)
   2. Register API routers
-  3. Create DB tables on startup
+  3. Initialize DB connection on startup (tables created when AUTO_CREATE_TABLES=true)
   4. Serve core.html as the SPA shell
 """
 from fastapi import FastAPI, HTTPException
@@ -15,6 +15,7 @@ from fastapi.responses import FileResponse
 from app.core.config import settings
 from app.core.database import init_db
 from app.core.exceptions import AppException, app_exception_handler, http_exception_handler
+from app.api.routes import auth as auth_router
 from app.api.routes import permits as permit_router
 from app.api.routes import users as user_router
 from app.api.routes import db_status as db_status_router
@@ -43,6 +44,7 @@ def on_startup():
 # ---------------------------------------------------------------------------
 # API Routers
 # ---------------------------------------------------------------------------
+app.include_router(auth_router.router)
 app.include_router(permit_router.router)
 app.include_router(user_router.router)
 app.include_router(db_status_router.router)
