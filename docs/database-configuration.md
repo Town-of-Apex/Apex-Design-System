@@ -35,8 +35,18 @@ The template uses **PostgreSQL** as its primary database. All connection setting
 
 Each app gets its own isolated dev database container — separate from the shared production Postgres.
 
-- **`run_dev.ps1`** — starts only `apex-dev-db` from `docker-compose.dev.yml` (port mapped to `127.0.0.1:5432`)
-- **`docker compose -f docker-compose.dev.yml up`** — Postgres plus backend and frontend in Docker
+Compose project **`apex-dev`** (`docker-compose.dev.yml`):
+
+| Container | Service | When |
+|-----------|---------|------|
+| `apex-dev-db` | `apex-dev-db` | Mode A (`run_dev.*`) and Mode B |
+| `apex-dev-backend` | `apex-backend` | Mode B only (full Docker stack) |
+| `apex-dev-frontend` | `apex-frontend` | Mode B only |
+
+- **`run_dev.ps1` / `run_dev.sh`** (Mode A) — starts only `apex-dev-db`; backend and Vite run on the host
+- **`docker compose -f docker-compose.dev.yml up --build`** (Mode B) — all three containers
+
+Production compose project **`apex-prod`** uses containers `apex-prod-backend` and `apex-prod-frontend` so names do not clash with dev on the same machine.
 
 Configure credentials in `.env`:
 

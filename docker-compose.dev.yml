@@ -1,10 +1,21 @@
-# Local development — Postgres + optional full stack with hot reload.
+# =============================================================================
+# LOCAL DEVELOPMENT — Docker Compose project: apex-dev
+# =============================================================================
 #
-# Postgres only (host-run backend via run_dev.ps1 / run_dev.sh):
-#   docker compose -f docker-compose.dev.yml up apex-dev-db -d --wait
+# Mode A — Recommended (host backend + Vite, hot reload):
+#   .\run_dev.ps1          (Windows)
+#   ./run_dev.sh           (macOS / Linux)
+#   Starts only apex-dev-db; uvicorn and npm run dev run on the host.
+#   Requires POSTGRES_HOST=127.0.0.1 in .env
 #
-# Full stack in Docker:
+# Mode B — Full stack in containers:
 #   docker compose -f docker-compose.dev.yml up --build
+#   Postgres hostname inside the stack: apex-dev-db (set on apex-backend service)
+#
+# DB reset (host tools): .\scripts\reset_dev_db.ps1
+# =============================================================================
+
+name: apex-dev
 
 services:
   apex-dev-db:
@@ -35,7 +46,7 @@ services:
       - dev
 
   apex-backend:
-    container_name: apex-backend
+    container_name: apex-dev-backend
     build: .
     restart: unless-stopped
     env_file:
@@ -59,7 +70,7 @@ services:
       - dev
 
   apex-frontend:
-    container_name: apex-frontend
+    container_name: apex-dev-frontend
     build: ./frontend
     restart: unless-stopped
     env_file:
@@ -72,6 +83,8 @@ services:
       - /app/node_modules
     ports:
       - "5173:5173"
+    depends_on:
+      - apex-backend
     networks:
       - dev
 

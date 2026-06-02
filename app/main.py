@@ -3,11 +3,6 @@ app/main.py
 
 FastAPI application factory.
 
-Responsibilities:
-  1. Mount static files and pages (AAS-1.0 standard)
-  2. Register API routers
-  3. Initialize DB connection on startup (tables created when AUTO_CREATE_TABLES=true)
-  4. Serve core.html as the SPA shell
 """
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse

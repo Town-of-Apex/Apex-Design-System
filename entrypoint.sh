@@ -1,18 +1,16 @@
-# THIS SCRIPT IS FOR 'DEV MODE' ONLY. DO NOT ATTEMPT TO USE THIS TO DEPLOY A PRODUCTION OR REMOTE-HOSTED APPLICATION
-
-
 #!/bin/bash
-set -e
+# Production backend container entrypoint (root Dockerfile).
+#
+# Local development — do not use this script directly:
+#   Windows:  .\run_dev.ps1
+#   macOS/Linux: ./run_dev.sh
+#   DB only:  docker compose -f docker-compose.dev.yml up apex-dev-db -d --wait
+#   Full stack in Docker: docker compose -f docker-compose.dev.yml up --build
 
-echo "Starting Apex Design System..."
-echo "Base Path: ${BASE_PATH:-'/'}"
+set -euo pipefail
 
-# Run the FastAPI server using uvicorn
-# We use the app.main:app syntax to point to the FastAPI instance
-echo "Launching backend..."
-exec uvicorn app.main:app --host 0.0.0.0 --port 8080
+echo "Starting Apex backend (production image)..."
+echo "BASE_PATH=${BASE_PATH:-/}"
+echo "PORT=${PORT:-8080}"
 
-
-# Launch the frontend using Vite dev server
-exec cd .\frontend\
-exec npm run dev
+exec uvicorn app.main:app --host 0.0.0.0 --port "${PORT:-8080}"

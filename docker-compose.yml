@@ -1,14 +1,25 @@
-# Production — backend + frontend only (no local Postgres).
-# Connects to the shared PostgreSQL container (postgres_db) on apex-internal.
+# =============================================================================
+# PRODUCTION / STAGING — Docker Compose project: apex-prod
+# =============================================================================
+#
+# Org-specific deployment (Traefik, external apex-internal network, shared
+# postgres_db). Not intended for everyday local dev — use docker-compose.dev.yml
+# and run_dev.ps1 / run_dev.sh instead.
+#
+# Before deploy:
+#   - Set POSTGRES_HOST=postgres_db and production credentials in .env
+#   - Ensure external network exists: docker network create apex-internal
 #
 #   docker compose up -d --build
 #
-# Local development uses docker-compose.dev.yml instead.
-# Set POSTGRES_HOST=postgres_db and app credentials in .env before deploying.
+# Note: frontend image still runs Vite dev server (production static build TBD).
+# =============================================================================
+
+name: apex-prod
 
 services:
   apex-backend:
-    container_name: apex-backend
+    container_name: apex-prod-backend
     build: .
     restart: unless-stopped
     env_file:
@@ -20,7 +31,7 @@ services:
       AUTO_MIGRATE_DEV: "false"
       ALLOW_SQLITE_FALLBACK: "false"
     volumes:
-      - apex-demo-data:/app/data
+      - apex-prod-data:/app/data
     networks:
       - apex-internal
     labels:
@@ -33,7 +44,7 @@ services:
       - "8080:8080"
 
   apex-frontend:
-    container_name: apex-frontend
+    container_name: apex-prod-frontend
     build: ./frontend
     restart: unless-stopped
     env_file:
@@ -52,7 +63,7 @@ services:
       - "5173:5173"
 
 volumes:
-  apex-demo-data:
+  apex-prod-data:
 
 networks:
   apex-internal:

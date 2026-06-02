@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Strip Windows CRLF and make entrypoint executable
+# Production backend entrypoint (see entrypoint.sh; local dev uses run_dev.*)
 RUN sed -i 's/\r$//' entrypoint.sh && chmod +x entrypoint.sh
 
 # Standard Apex Port
